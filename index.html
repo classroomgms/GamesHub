@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Classroom</title>
-  <!-- Favicon / Tab Icon -->
   <link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
 
   <style>
@@ -59,29 +58,34 @@
       margin: 10px 0 0 0;
       padding: 0;
     }
-    /* Fullscreen Game View */
     #gameScreen {
       display: none;
       padding: 20px;
+      position: relative;
     }
     iframe {
       width: 90%;
       height: 600px;
       border: none;
       border-radius: 10px;
+      transition: all 0.3s ease;
     }
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
+    .game-controls {
+      margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .game-controls button {
+      padding: 8px 16px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       background: #4cafef;
       color: white;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
-      transition: background 0.2s ease;
     }
-    button:hover {
+    .game-controls button:hover {
       background: #3889c6;
     }
   </style>
@@ -89,96 +93,85 @@
 <body>
   <header id="mainHeader">🎮 POWBoy1’s Game Hub 🎮</header>
 
-  <!-- Main Menu -->
-  <div id="mainMenu" class="game-grid">
-    <div class="game-card" onclick="openGame('sprunki')">
-      <img src="assets/sprunki.png" alt="Sprunki Icon">
-      <h3>Incredibox - Sprunki</h3>
-    </div>
-
-    <div class="game-card" onclick="openGame('fnf')">
-      <img src="assets/fnf.png" alt="FNF Icon">
-      <h3>Friday Night Funkin</h3>
-    </div>
-
-    <div class="game-card" onclick="openGame('game3')">
-      <img src="assets/game3.png" alt="Game 3 Icon">
-      <h3>Game 3</h3>
-    </div>
-  </div>
+  <div id="mainMenu" class="game-grid"></div>
 
   <!-- Game Screen -->
   <div id="gameScreen">
     <iframe id="gameFrame" src=""></iframe>
-    <br>
-    <button onclick="goBack()">⬅ Back to Main Menu</button>
+    <div class="game-controls">
+      <button onclick="backToHub()">⬅ Back to Hub</button>
+      <button onclick="toggleFullscreen()">Fullscreen</button>
+    </div>
   </div>
 
   <script>
-    const games = {
-      sprunki: {
-        url: "https://powboy1.github.io/Incredibox-Sprunki/",
-        title: "Incredibox - Sprunki",
-        icon: "assets/sprunki.png"
-      },
-      fnf: {
-        url: "https://html-classic.itch.zone/html/2876359-1370806/index.html",
-        title: "Friday Night Funkin",
-        icon: "assets/fnf.png"
-      },
-      game3: {
-        url: "https://yourusername.github.io/game3/",
-        title: "Game 3",
-        icon: "assets/game3.png"
-      }
-    };
+    const games = [
+      { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
+      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
+      { key: "game3", title: "Game 3", icon: "assets/game3.png", url: "https://yourusername.github.io/game3/" }
+    ];
+
+    const mainMenu = document.getElementById("mainMenu");
+    const gameScreen = document.getElementById("gameScreen");
+    const gameFrame = document.getElementById("gameFrame");
+    const mainHeader = document.getElementById("mainHeader");
+
+    let isFullscreen = false;
+    let currentGameKey = null;
+
+    // Generate game cards dynamically
+    games.forEach(game => {
+      const card = document.createElement("div");
+      card.className = "game-card";
+      card.innerHTML = `
+        <img src="${game.icon}" alt="${game.title}">
+        <h3>${game.title}</h3>
+        <button onclick="openGame('${game.key}')">Play</button>
+      `;
+      mainMenu.appendChild(card);
+    });
 
     function openGame(key) {
-      const game = games[key];
+      const game = games.find(g => g.key === key);
       if (!game) return;
 
-      // update hash in URL
-      location.hash = key;
-
-      document.getElementById("mainMenu").style.display = "none";
-      document.getElementById("gameScreen").style.display = "block";
-      document.getElementById("gameFrame").src = game.url;
-
-      // update header with game icon + title
-      document.getElementById("mainHeader").innerHTML = `
-        <img src="${game.icon}" alt="${game.title} Icon">
-        ${game.title}
-      `;
+      gameFrame.src = game.url;
+      gameScreen.style.display = "block";
+      mainMenu.style.display = "none";
+      mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title}"> ${game.title}`;
+      currentGameKey = key;
+      isFullscreen = false;
     }
 
-    function goBack() {
-      location.hash = "";
-      document.getElementById("mainMenu").style.display = "grid";
-      document.getElementById("gameScreen").style.display = "none";
-      document.getElementById("gameFrame").src = "";
-
-      // restore hub header
-      document.getElementById("mainHeader").innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
+    function backToHub() {
+      gameScreen.style.display = "none";
+      mainMenu.style.display = "grid";
+      gameFrame.src = "";
+      mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
+      isFullscreen = false;
     }
 
-    // Check if URL has a hash when loading
-    window.onload = () => {
-      const hash = location.hash.replace("#", "");
-      if (games[hash]) {
-        openGame(hash);
-      }
-    };
-
-    // Handle back/forward navigation
-    window.onhashchange = () => {
-      const hash = location.hash.replace("#", "");
-      if (games[hash]) {
-        openGame(hash);
+    function toggleFullscreen() {
+      if (!isFullscreen) {
+        gameFrame.style.width = "100vw";
+        gameFrame.style.height = "100vh";
+        gameFrame.style.position = "fixed";
+        gameFrame.style.top = 0;
+        gameFrame.style.left = 0;
+        gameFrame.style.zIndex = 999;
+        isFullscreen = true;
       } else {
-        goBack();
+        gameFrame.style.width = "90%";
+        gameFrame.style.height = "600px";
+        gameFrame.style.position = "static";
+        gameFrame.style.zIndex = "auto";
+        isFullscreen = false;
       }
-    };
-  </script>
+    }
 
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && isFullscreen) toggleFullscreen();
+    });
+  </script>
 </body>
 </html>
