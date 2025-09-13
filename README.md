@@ -1,2 +1,12 @@
 # UnblockedGames
-Play Games During School! The Tab name will show as Google Classroom and the icon will look like Google Classroom, Your Teacher won't even know your playing games during class (If they have a Tab Checker).
+
+Play games during school without raising suspicion!  
+This project disguises the browser tab as **Google Classroom**, including both the **tab name** and **icon**, so even if a teacher uses a tab checker, it blends right in.
+
+## Features
+- Google Classroom style **tab name**
+- Google Classroom style **icon**
+- Easy to use, just open and play
+
+## Disclaimer
+This project is for educational purposes only. Use responsibly.
