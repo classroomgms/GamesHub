@@ -22,6 +22,15 @@
       padding: 20px;
       font-size: 24px;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    header img {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
     }
     .game-grid {
       display: grid;
@@ -34,51 +43,142 @@
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       padding: 15px;
+      cursor: pointer;
       transition: transform 0.2s ease;
     }
     .game-card:hover {
       transform: scale(1.05);
     }
     .game-card img {
-      max-width: 100%;
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
       border-radius: 8px;
     }
-    .game-card a {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 14px;
+    .game-card h3 {
+      margin: 10px 0 0 0;
+      padding: 0;
+    }
+    /* Fullscreen Game View */
+    #gameScreen {
+      display: none;
+      padding: 20px;
+    }
+    iframe {
+      width: 90%;
+      height: 600px;
+      border: none;
+      border-radius: 10px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
       background: #4cafef;
       color: white;
-      text-decoration: none;
-      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
       transition: background 0.2s ease;
     }
-    .game-card a:hover {
+    button:hover {
       background: #3889c6;
     }
   </style>
 </head>
 <body>
-  <header>🎮 POWBoy1’s Game Hub 🎮</header>
+  <header id="mainHeader">🎮 POWBoy1’s Game Hub 🎮</header>
 
-  <div class="game-grid">
-    <!-- Embedded Game 1 -->
-    <div class="game-card">
+  <!-- Main Menu -->
+  <div id="mainMenu" class="game-grid">
+    <div class="game-card" onclick="openGame('sprunki')">
+      <img src="assets/sprunki.png" alt="Sprunki Icon">
       <h3>Incredibox - Sprunki</h3>
-      <iframe src="https://powboy1.github.io/Incredibox-Sprunki/"></iframe>
     </div>
 
-    <!-- Embedded Game 2 -->
-    <div class="game-card">
+    <div class="game-card" onclick="openGame('fnf')">
+      <img src="assets/fnf.png" alt="FNF Icon">
       <h3>Friday Night Funkin</h3>
-      <iframe src="https://html-classic.itch.zone/html/2876359-1370806/index.html"></iframe>
     </div>
 
-    <!-- Embedded Game 3 -->
-    <div class="game-card">
+    <div class="game-card" onclick="openGame('game3')">
+      <img src="assets/game3.png" alt="Game 3 Icon">
       <h3>Game 3</h3>
-      <iframe src="https://yourusername.github.io/game3/"></iframe>
     </div>
   </div>
+
+  <!-- Game Screen -->
+  <div id="gameScreen">
+    <iframe id="gameFrame" src=""></iframe>
+    <br>
+    <button onclick="goBack()">⬅ Back to Main Menu</button>
+  </div>
+
+  <script>
+    const games = {
+      sprunki: {
+        url: "https://powboy1.github.io/Incredibox-Sprunki/",
+        title: "Incredibox - Sprunki",
+        icon: "assets/sprunki.png"
+      },
+      fnf: {
+        url: "https://html-classic.itch.zone/html/2876359-1370806/index.html",
+        title: "Friday Night Funkin",
+        icon: "assets/fnf.png"
+      },
+      game3: {
+        url: "https://yourusername.github.io/game3/",
+        title: "Game 3",
+        icon: "assets/game3.png"
+      }
+    };
+
+    function openGame(key) {
+      const game = games[key];
+      if (!game) return;
+
+      // update hash in URL
+      location.hash = key;
+
+      document.getElementById("mainMenu").style.display = "none";
+      document.getElementById("gameScreen").style.display = "block";
+      document.getElementById("gameFrame").src = game.url;
+
+      // update header with game icon + title
+      document.getElementById("mainHeader").innerHTML = `
+        <img src="${game.icon}" alt="${game.title} Icon">
+        ${game.title}
+      `;
+    }
+
+    function goBack() {
+      location.hash = "";
+      document.getElementById("mainMenu").style.display = "grid";
+      document.getElementById("gameScreen").style.display = "none";
+      document.getElementById("gameFrame").src = "";
+
+      // restore hub header
+      document.getElementById("mainHeader").innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
+    }
+
+    // Check if URL has a hash when loading
+    window.onload = () => {
+      const hash = location.hash.replace("#", "");
+      if (games[hash]) {
+        openGame(hash);
+      }
+    };
+
+    // Handle back/forward navigation
+    window.onhashchange = () => {
+      const hash = location.hash.replace("#", "");
+      if (games[hash]) {
+        openGame(hash);
+      } else {
+        goBack();
+      }
+    };
+  </script>
+
 </body>
 </html>
