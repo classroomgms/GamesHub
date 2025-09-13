@@ -152,17 +152,15 @@
         <img src="${game.icon}" alt="${game.title}">
         <h3>${game.title}</h3>
       `;
-
       card.addEventListener("click", () => {
         openGame(game);
       });
-
       mainMenu.appendChild(card);
     });
 
     function openGame(game) {
       gameFrame.src = game.url;
-      gameFrame.style.display = "none"; // hidden until overlay clicked
+      gameFrame.style.display = "none"; // hide until overlay clicked
       iframeOverlay.style.display = "flex"; // show overlay
       gameScreen.style.display = "block";
       mainMenu.style.display = "none";
@@ -183,29 +181,46 @@
       gameFrame.style.display = "none";
       iframeOverlay.style.display = "none";
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
+      exitFullscreen();
       isFullscreen = false;
     }
 
     function toggleFullscreen() {
       if (!isFullscreen) {
-        gameFrame.style.width = "100vw";
-        gameFrame.style.height = "100vh";
-        gameFrame.style.position = "fixed";
-        gameFrame.style.top = 0;
-        gameFrame.style.left = 0;
-        gameFrame.style.zIndex = 999;
+        enterFullscreen(gameScreen);
         isFullscreen = true;
       } else {
-        gameFrame.style.width = "90%";
-        gameFrame.style.height = "600px";
-        gameFrame.style.position = "static";
-        gameFrame.style.zIndex = "auto";
+        exitFullscreen();
         isFullscreen = false;
       }
     }
 
+    function enterFullscreen(element) {
+      if (element.requestFullscreen) {
+        element.requestFullscreen();
+      } else if (element.webkitRequestFullscreen) { /* Safari */
+        element.webkitRequestFullscreen();
+      } else if (element.msRequestFullscreen) { /* IE11 */
+        element.msRequestFullscreen();
+      }
+    }
+
+    function exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { /* Safari */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE11 */
+        document.msExitFullscreen();
+      }
+    }
+
+    // Exit fullscreen with Escape
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && isFullscreen) toggleFullscreen();
+      if (e.key === "Escape" && isFullscreen) {
+        exitFullscreen();
+        isFullscreen = false;
+      }
     });
   </script>
 </body>
