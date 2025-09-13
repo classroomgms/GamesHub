@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Classroom</title>
-  <link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
+  <link rel="icon" type="image/x-icon" href="assets/logo_square.ico">
 
   <style>
     body {
@@ -38,6 +38,7 @@
       padding: 20px;
     }
     .game-card {
+      position: relative;
       background: white;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -58,6 +59,21 @@
       margin: 10px 0 0 0;
       padding: 0;
     }
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
     #gameScreen {
       display: none;
       padding: 20px;
@@ -69,6 +85,7 @@
       border: none;
       border-radius: 10px;
       transition: all 0.3s ease;
+      display: none;
     }
     .game-controls {
       margin-top: 10px;
@@ -117,7 +134,6 @@
     const mainHeader = document.getElementById("mainHeader");
 
     let isFullscreen = false;
-    let currentGameKey = null;
 
     // Generate game cards dynamically
     games.forEach(game => {
@@ -126,20 +142,23 @@
       card.innerHTML = `
         <img src="${game.icon}" alt="${game.title}">
         <h3>${game.title}</h3>
-        <button onclick="openGame('${game.key}')">Play</button>
+        <div class="overlay">Play</div>
       `;
+
+      // Click overlay to start game
+      card.querySelector(".overlay").addEventListener("click", () => {
+        openGame(game);
+      });
+
       mainMenu.appendChild(card);
     });
 
-    function openGame(key) {
-      const game = games.find(g => g.key === key);
-      if (!game) return;
-
+    function openGame(game) {
       gameFrame.src = game.url;
+      gameFrame.style.display = "block";
       gameScreen.style.display = "block";
       mainMenu.style.display = "none";
       mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title}"> ${game.title}`;
-      currentGameKey = key;
       isFullscreen = false;
     }
 
@@ -147,6 +166,7 @@
       gameScreen.style.display = "none";
       mainMenu.style.display = "grid";
       gameFrame.src = "";
+      gameFrame.style.display = "none";
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       isFullscreen = false;
     }
