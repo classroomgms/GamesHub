@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Classroom</title>
+  <!-- Favicon / Tab Icon -->
+  <link rel="icon" type="image/x-icon" href="images/GoogleClassroomIcon.ico">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      color: #333;
+      text-align: center;
+    }
+    header {
+      background: #4cafef;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .game-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      padding: 15px;
+      transition: transform 0.2s ease;
+    }
+    .game-card:hover {
+      transform: scale(1.05);
+    }
+    .game-card img {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    .game-card a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 8px 14px;
+      background: #4cafef;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.2s ease;
+    }
+    .game-card a:hover {
+      background: #3889c6;
+    }
+  </style>
+</head>
+<body>
+  <header>🎮 POWBoy1’s Game Hub 🎮</header>
+
+  <div class="game-grid">
+    <!-- Embedded Game 1 -->
+    <div class="game-card">
+      <h3>Incredibox - Sprunki</h3>
+      <iframe src="https://powboy1.github.io/Incredibox-Sprunki/"></iframe>
+    </div>
+
+    <!-- Embedded Game 2 -->
+    <div class="game-card">
+      <h3>Game 2</h3>
+      <iframe src="https://yourusername.github.io/game2/"></iframe>
+    </div>
+
+    <!-- Embedded Game 3 -->
+    <div class="game-card">
+      <h3>Game 3</h3>
+      <iframe src="https://yourusername.github.io/game3/"></iframe>
+    </div>
+  </div>
+</body>
+</html>
