@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Google Classroom</title>
-  <link rel="icon" type="image/x-icon" href="assets/logo_square.ico">
+  <link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
 
   <style>
     body {
@@ -38,7 +38,6 @@
       padding: 20px;
     }
     .game-card {
-      position: relative;
       background: white;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -59,33 +58,39 @@
       margin: 10px 0 0 0;
       padding: 0;
     }
-    .overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-    }
     #gameScreen {
       display: none;
       padding: 20px;
       position: relative;
     }
-    iframe {
+    .iframe-container {
+      position: relative;
       width: 90%;
+      margin: 0 auto;
       height: 600px;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
       border: none;
       border-radius: 10px;
-      transition: all 0.3s ease;
-      display: none;
+      display: none; /* hidden until overlay clicked */
+    }
+    .iframe-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 10px;
     }
     .game-controls {
       margin-top: 10px;
@@ -114,7 +119,10 @@
 
   <!-- Game Screen -->
   <div id="gameScreen">
-    <iframe id="gameFrame" src=""></iframe>
+    <div class="iframe-container">
+      <iframe id="gameFrame" src=""></iframe>
+      <div id="iframeOverlay" class="iframe-overlay">Click to Play</div>
+    </div>
     <div class="game-controls">
       <button onclick="backToHub()">⬅ Back to Hub</button>
       <button onclick="toggleFullscreen()">Fullscreen</button>
@@ -131,6 +139,7 @@
     const mainMenu = document.getElementById("mainMenu");
     const gameScreen = document.getElementById("gameScreen");
     const gameFrame = document.getElementById("gameFrame");
+    const iframeOverlay = document.getElementById("iframeOverlay");
     const mainHeader = document.getElementById("mainHeader");
 
     let isFullscreen = false;
@@ -142,11 +151,9 @@
       card.innerHTML = `
         <img src="${game.icon}" alt="${game.title}">
         <h3>${game.title}</h3>
-        <div class="overlay">Play</div>
       `;
 
-      // Click overlay to start game
-      card.querySelector(".overlay").addEventListener("click", () => {
+      card.addEventListener("click", () => {
         openGame(game);
       });
 
@@ -155,18 +162,26 @@
 
     function openGame(game) {
       gameFrame.src = game.url;
-      gameFrame.style.display = "block";
+      gameFrame.style.display = "none"; // hidden until overlay clicked
+      iframeOverlay.style.display = "flex"; // show overlay
       gameScreen.style.display = "block";
       mainMenu.style.display = "none";
       mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title}"> ${game.title}`;
       isFullscreen = false;
     }
 
+    // Click overlay to start iframe
+    iframeOverlay.addEventListener("click", () => {
+      iframeOverlay.style.display = "none";
+      gameFrame.style.display = "block";
+    });
+
     function backToHub() {
       gameScreen.style.display = "none";
       mainMenu.style.display = "grid";
       gameFrame.src = "";
       gameFrame.style.display = "none";
+      iframeOverlay.style.display = "none";
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       isFullscreen = false;
     }
