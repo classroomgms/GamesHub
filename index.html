@@ -41,22 +41,34 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      padding: 15px;
       cursor: pointer;
       transition: transform 0.2s ease;
+      overflow: hidden;
     }
     .game-card:hover {
       transform: scale(1.05);
     }
-    .game-card img {
+    .game-thumbnail {
       width: 100%;
       height: 150px;
       object-fit: cover;
-      border-radius: 8px;
+      border-bottom: 1px solid #ddd;
     }
-    .game-card h3 {
-      margin: 10px 0 0 0;
-      padding: 0;
+    .game-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+    }
+    .game-info img {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+    }
+    .game-info h3 {
+      margin: 0;
+      font-size: 16px;
+      text-align: left;
     }
     #gameScreen {
       display: none;
@@ -131,9 +143,27 @@
 
   <script>
     const games = [
-      { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
-      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
-      { key: "game3", title: "Game 3", icon: "assets/game3.png", url: "https://yourusername.github.io/game3/" }
+      { 
+        key: "sprunki", 
+        title: "Incredibox - Sprunki", 
+        icon: "assets/sprunki-icon.png", 
+        thumbnail: "assets/sprunki-thumb.png", 
+        url: "https://powboy1.github.io/Incredibox-Sprunki/" 
+      },
+      { 
+        key: "fnf", 
+        title: "Friday Night Funkin", 
+        icon: "assets/fnf-icon.png", 
+        thumbnail: "assets/fnf-thumb.png", 
+        url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" 
+      },
+      { 
+        key: "adofai", 
+        title: "A Dance of Fire and Ice", 
+        icon: "assets/adofai-icon.png", 
+        thumbnail: "assets/adofai-thumb.png", 
+        url: "https://html-classic.itch.zone/html/1175401/index.html" 
+      }
     ];
 
     const mainMenu = document.getElementById("mainMenu");
@@ -150,8 +180,11 @@
       const card = document.createElement("div");
       card.className = "game-card";
       card.innerHTML = `
-        <img src="${game.icon}" alt="${game.title}">
-        <h3>${game.title}</h3>
+        <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
+        <div class="game-info">
+          <img src="${game.icon}" alt="${game.title} icon">
+          <h3>${game.title}</h3>
+        </div>
       `;
       card.addEventListener("click", () => {
         openGame(game);
@@ -165,7 +198,7 @@
       iframeOverlay.style.display = "flex"; // show overlay
       gameScreen.style.display = "block";
       mainMenu.style.display = "none";
-      mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title}"> ${game.title}`;
+      mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon"> ${game.title}`;
       isFullscreen = false;
       gameControls.style.display = "flex"; // ensure buttons visible
     }
