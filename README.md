@@ -11,4 +11,5 @@ This project disguises the browser tab as **Google Classroom**, including both t
 
 ## Disclaimer
 This project is for educational purposes only. Use responsibly.
+
 This project uses github.io games, and itch.io games. Play at your own risks.
