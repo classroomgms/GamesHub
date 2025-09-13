@@ -133,7 +133,7 @@
     const games = [
       { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
       { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
-      { key: "game3", title: "Game 3", icon: "assets/game3.png", url: "https://kbhgames.com/game/level-devil" }
+      { key: "game3", title: "Game 3", icon: "assets/game3.png", url: "https://yourusername.github.io/game3/" }
     ];
 
     const mainMenu = document.getElementById("mainMenu");
@@ -141,6 +141,7 @@
     const gameFrame = document.getElementById("gameFrame");
     const iframeOverlay = document.getElementById("iframeOverlay");
     const mainHeader = document.getElementById("mainHeader");
+    const gameControls = document.querySelector(".game-controls");
 
     let isFullscreen = false;
 
@@ -166,6 +167,7 @@
       mainMenu.style.display = "none";
       mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title}"> ${game.title}`;
       isFullscreen = false;
+      gameControls.style.display = "flex"; // ensure buttons visible
     }
 
     // Click overlay to start iframe
@@ -182,16 +184,13 @@
       iframeOverlay.style.display = "none";
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       exitFullscreen();
-      isFullscreen = false;
     }
 
     function toggleFullscreen() {
       if (!isFullscreen) {
-        enterFullscreen(gameScreen);
-        isFullscreen = true;
+        enterFullscreen(gameFrame); // only the iframe
       } else {
         exitFullscreen();
-        isFullscreen = false;
       }
     }
 
@@ -215,13 +214,22 @@
       }
     }
 
-    // Exit fullscreen with Escape
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && isFullscreen) {
-        exitFullscreen();
+    // Hide/show buttons based on fullscreen state
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener("webkitfullscreenchange", handleFullscreenChange); // Safari
+    document.addEventListener("msfullscreenchange", handleFullscreenChange); // IE11
+
+    function handleFullscreenChange() {
+      if (document.fullscreenElement === gameFrame ||
+          document.webkitFullscreenElement === gameFrame ||
+          document.msFullscreenElement === gameFrame) {
+        gameControls.style.display = "none"; // hide buttons
+        isFullscreen = true;
+      } else {
+        gameControls.style.display = "flex"; // show buttons
         isFullscreen = false;
       }
-    });
+    }
   </script>
 </body>
 </html>
