@@ -78,10 +78,20 @@
       position: relative;
     }
 
+    .iframe-wrapper {
+      width: 100%;
+      max-width: 1920px;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+    }
+
     iframe {
-      border: none;
       width: 100%;
       height: 100%;
+      border: none;
       display: none;
     }
 
@@ -96,6 +106,7 @@
       border-radius: 10px;
       font-size: 18px;
       cursor: pointer;
+      z-index: 5;
     }
 
     .back-button {
@@ -152,7 +163,9 @@
 
   <div id="gameScreen" class="game-screen">
     <div id="iframeOverlay" class="overlay">▶ Play</div>
-    <iframe id="gameFrame"></iframe>
+    <div class="iframe-wrapper">
+      <iframe id="gameFrame"></iframe>
+    </div>
     <div class="game-controls">
       <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
     </div>
@@ -181,8 +194,8 @@
     const mainHeader = document.getElementById("mainHeader");
     const backButton = document.getElementById("backButton");
     const gameControls = document.querySelector(".game-controls");
+    const iframeWrapper = document.querySelector(".iframe-wrapper");
 
-    // Build grid and hide broken games
     games.forEach(game => {
       const card = document.createElement("div");
       card.className = "game-card";
@@ -206,6 +219,7 @@
       backButton.style.display = "block";
       mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon"> ${game.title}`;
       gameControls.style.display = "flex";
+      centerIframe();
     }
 
     iframeOverlay.addEventListener("click", () => {
@@ -232,11 +246,24 @@
       }
     }
 
+    function centerIframe() {
+      const windowHeight = window.innerHeight;
+      const iframeHeight = iframeWrapper.offsetHeight;
+      const topMargin = Math.max((windowHeight - iframeHeight) / 2, 0);
+      iframeWrapper.style.marginTop = `${topMargin}px`;
+      iframeWrapper.style.marginBottom = `${topMargin}px`;
+    }
+
+    window.addEventListener("resize", centerIframe);
+
     document.addEventListener("fullscreenchange", () => {
       if (document.fullscreenElement === gameFrame) {
         gameControls.style.display = "none";
+        iframeWrapper.style.marginTop = "0";
+        iframeWrapper.style.marginBottom = "0";
       } else {
         gameControls.style.display = "flex";
+        centerIframe();
       }
     });
   </script>
