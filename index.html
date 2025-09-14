@@ -75,6 +75,7 @@
       align-items: center;
       justify-content: center;
       background: black;
+      position: relative;
     }
 
     iframe {
@@ -82,24 +83,6 @@
       width: 100%;
       height: 100%;
       display: none;
-    }
-
-    .game-controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px;
-      background: #222;
-    }
-
-    .game-controls button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background: #2c7be5;
-      color: white;
-      font-size: 14px;
     }
 
     .overlay {
@@ -113,6 +96,40 @@
       border-radius: 10px;
       font-size: 18px;
       cursor: pointer;
+    }
+
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 8px 12px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+      z-index: 10;
+    }
+
+    .game-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      background: #222;
+      position: absolute;
+      bottom: 10px;
+    }
+
+    .game-controls button {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #2c7be5;
+      color: white;
+      font-size: 14px;
     }
 
     footer {
@@ -129,13 +146,14 @@
     🎮 POWBoy1’s Game Hub 🎮
   </header>
 
+  <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
+
   <div id="mainMenu" class="games-grid"></div>
 
   <div id="gameScreen" class="game-screen">
     <div id="iframeOverlay" class="overlay">▶ Play</div>
     <iframe id="gameFrame"></iframe>
     <div class="game-controls">
-      <button onclick="backToHub()">⬅ Back</button>
       <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
     </div>
   </div>
@@ -161,24 +179,22 @@
     const gameFrame = document.getElementById("gameFrame");
     const iframeOverlay = document.getElementById("iframeOverlay");
     const mainHeader = document.getElementById("mainHeader");
+    const backButton = document.getElementById("backButton");
     const gameControls = document.querySelector(".game-controls");
 
+    // Build grid and hide broken games
     games.forEach(game => {
-      fetch(game.url, { method: "HEAD", mode: "no-cors" })
-        .then(() => {
-          const card = document.createElement("div");
-          card.className = "game-card";
-          card.innerHTML = `
-            <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
-            <div class="game-info">
-              <img src="${game.icon}" alt="${game.title} icon">
-              <h3>${game.title}</h3>
-            </div>
-          `;
-          card.addEventListener("click", () => openGame(game));
-          mainMenu.appendChild(card);
-        })
-        .catch(() => {});
+      const card = document.createElement("div");
+      card.className = "game-card";
+      card.innerHTML = `
+        <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
+        <div class="game-info">
+          <img src="${game.icon}" alt="${game.title} icon">
+          <h3>${game.title}</h3>
+        </div>
+      `;
+      card.addEventListener("click", () => openGame(game));
+      mainMenu.appendChild(card);
     });
 
     function openGame(game) {
@@ -187,6 +203,7 @@
       iframeOverlay.style.display = "flex";
       gameScreen.style.display = "flex";
       mainMenu.style.display = "none";
+      backButton.style.display = "block";
       mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon"> ${game.title}`;
       gameControls.style.display = "flex";
     }
@@ -202,6 +219,7 @@
       gameFrame.src = "";
       gameFrame.style.display = "none";
       iframeOverlay.style.display = "none";
+      backButton.style.display = "none";
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       if (document.fullscreenElement) document.exitFullscreen();
     }
