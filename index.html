@@ -44,13 +44,13 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
-    justify-items: center; /* center each card horizontally */
-    align-items: start;    /* keep them top-aligned */
+    justify-items: center;
+    align-items: start;
   }
 
   .game-card {
     width: 250px;
-    height: 250px; /* fixed size */
+    height: 250px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -157,7 +157,7 @@
     font-size: 14px;
     color: #333;
     text-align: center;
-    margin-top: auto; /* stick footer to bottom */
+    margin-top: auto;
   }
 </style>
 </head>
@@ -180,16 +180,25 @@
 <footer>Made by POWBoy1</footer>
 
 <script>
-const games = [
-  { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
-  { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
-  { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://html.itch.zone/html/14937308/HTML/index.html" },
-  { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://webecomewhatwebehold.github.io/file/" },
-  { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://html-classic.itch.zone/html/14308892/index.html" },
-  { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://www.gamenora.com/embed/a-dance-of-fire-and-ice" },
-  { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "https://www.gamenora.com/embed/minecraft" }
-  { key: "monkeymart", title: "Monkey Mart", icon: "assets/monkeymart-icon.png", thumbnail: "assets/monkeymart-thumb.png", url: "https://www.gamenora.com/embed/monkey-mart" }
-];
+let games = [];
+try {
+  games = [
+    { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
+    { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
+    { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://html.itch.zone/html/14937308/HTML/index.html" },
+    { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://webecomewhatwebehold.github.io/file/" },
+    { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://html-classic.itch.zone/html/14308892/index.html" },
+    { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://www.gamenora.com/embed/a-dance-of-fire-and-ice" },
+    { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "https://www.gamenora.com/embed/minecraft" },
+    { key: "monkeymart", title: "Monkey Mart", icon: "assets/monkeymart-icon.png", thumbnail: "assets/monkeymart-thumb.png", url: "https://www.gamenora.com/embed/monkey-mart" }
+  ];
+} catch (e) {
+  const mainMenu = document.getElementById("mainMenu");
+  mainMenu.innerHTML = `<div style="color:red; font-weight:bold; font-size:18px; text-align:center;">
+    ⚠ Broken – Go to Issues and tell POWBoy1 the situation.
+  </div>`;
+  console.error("Game list parsing failed:", e);
+}
 
 const mainMenu = document.getElementById("mainMenu");
 const gameScreen = document.getElementById("gameScreen");
@@ -198,20 +207,22 @@ const iframeOverlay = document.getElementById("iframeOverlay");
 const mainHeader = document.getElementById("mainHeader");
 const gameControls = document.querySelector(".game-controls");
 
-// Build grid
-games.forEach(game => {
-  const card = document.createElement("div");
-  card.className = "game-card";
-  card.innerHTML = `
-    <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
-    <div class="game-info">
-      <img src="${game.icon}" alt="${game.title} icon">
-      <h3>${game.title}</h3>
-    </div>
-  `;
-  card.addEventListener("click", () => openGame(game));
-  mainMenu.appendChild(card);
-});
+// Build grid if games are valid
+if (games.length > 0) {
+  games.forEach(game => {
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.innerHTML = `
+      <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
+      <div class="game-info">
+        <img src="${game.icon}" alt="${game.title} icon">
+        <h3>${game.title}</h3>
+      </div>
+    `;
+    card.addEventListener("click", () => openGame(game));
+    mainMenu.appendChild(card);
+  });
+}
 
 function openGame(game) {
   gameFrame.src = game.url;
