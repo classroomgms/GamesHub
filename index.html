@@ -14,6 +14,9 @@
       background: #f4f4f9;
       color: #333;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
     header {
       background: #4cafef;
@@ -25,6 +28,7 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
+      flex-shrink: 0;
     }
     header img {
       width: 32px;
@@ -36,6 +40,7 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 20px;
+      flex: 1;
     }
     .game-card {
       background: white;
@@ -44,6 +49,8 @@
       cursor: pointer;
       transition: transform 0.2s ease;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     .game-card:hover {
       transform: scale(1.05);
@@ -74,12 +81,14 @@
       display: none;
       padding: 20px;
       position: relative;
+      flex: 1;
     }
     .iframe-container {
       position: relative;
       width: 90%;
       margin: 0 auto;
       height: 600px;
+      max-width: 1200px;
     }
     iframe {
       width: 100%;
@@ -163,7 +172,7 @@
         icon: "assets/ssb-icon.png", 
         thumbnail: "assets/ssb-thumb.png", 
         url: "https://html.itch.zone/html/14937308/HTML/index.html" 
-      }
+      },
       { 
         key: "wbwwb", 
         title: "We Become What We Behold", 
