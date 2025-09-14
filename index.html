@@ -37,7 +37,7 @@
     }
     .game-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
       padding: 20px;
       flex: 1;
@@ -95,7 +95,7 @@
       height: 100%;
       border: none;
       border-radius: 10px;
-      display: none; /* hidden until overlay clicked */
+      display: none;
     }
     .iframe-overlay {
       position: absolute;
@@ -130,6 +130,18 @@
     }
     .game-controls button:hover {
       background: #3889c6;
+    }
+
+    /* Responsive grid */
+    @media (max-width: 768px) {
+      .game-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 480px) {
+      .game-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -178,7 +190,7 @@
         title: "We Become What We Behold", 
         icon: "assets/wbwwb-icon.png", 
         thumbnail: "assets/wbwwb-thumb.png", 
-        url: "https://html-classic.itch.zone/html/300364/index.html?v=1542781840" 
+        url: "https://html-classic.itch.zone/html/300364/index.html" 
       }
     ];
 
@@ -189,9 +201,7 @@
     const mainHeader = document.getElementById("mainHeader");
     const gameControls = document.querySelector(".game-controls");
 
-    let isFullscreen = false;
-
-    // Generate game cards dynamically
+    // Build grid dynamically
     games.forEach(game => {
       const card = document.createElement("div");
       card.className = "game-card";
@@ -202,24 +212,20 @@
           <h3>${game.title}</h3>
         </div>
       `;
-      card.addEventListener("click", () => {
-        openGame(game);
-      });
+      card.addEventListener("click", () => openGame(game));
       mainMenu.appendChild(card);
     });
 
     function openGame(game) {
       gameFrame.src = game.url;
-      gameFrame.style.display = "none"; // hide until overlay clicked
-      iframeOverlay.style.display = "flex"; // show overlay
+      gameFrame.style.display = "none";
+      iframeOverlay.style.display = "flex";
       gameScreen.style.display = "block";
       mainMenu.style.display = "none";
       mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon"> ${game.title}`;
-      isFullscreen = false;
-      gameControls.style.display = "flex"; // ensure buttons visible
+      gameControls.style.display = "flex";
     }
 
-    // Click overlay to start iframe
     iframeOverlay.addEventListener("click", () => {
       iframeOverlay.style.display = "none";
       gameFrame.style.display = "block";
@@ -236,49 +242,21 @@
     }
 
     function toggleFullscreen() {
-      if (!isFullscreen) {
-        enterFullscreen(gameFrame); // only the iframe
+      if (!document.fullscreenElement) {
+        gameFrame.requestFullscreen();
       } else {
-        exitFullscreen();
-      }
-    }
-
-    function enterFullscreen(element) {
-      if (element.requestFullscreen) {
-        element.requestFullscreen();
-      } else if (element.webkitRequestFullscreen) { /* Safari */
-        element.webkitRequestFullscreen();
-      } else if (element.msRequestFullscreen) { /* IE11 */
-        element.msRequestFullscreen();
-      }
-    }
-
-    function exitFullscreen() {
-      if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) { /* Safari */
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { /* IE11 */
-        document.msExitFullscreen();
       }
     }
 
-    // Hide/show buttons based on fullscreen state
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    document.addEventListener("webkitfullscreenchange", handleFullscreenChange); // Safari
-    document.addEventListener("msfullscreenchange", handleFullscreenChange); // IE11
-
-    function handleFullscreenChange() {
-      if (document.fullscreenElement === gameFrame ||
-          document.webkitFullscreenElement === gameFrame ||
-          document.msFullscreenElement === gameFrame) {
-        gameControls.style.display = "none"; // hide buttons
-        isFullscreen = true;
+    // Track fullscreen state
+    document.addEventListener("fullscreenchange", () => {
+      if (document.fullscreenElement === gameFrame) {
+        gameControls.style.display = "none";
       } else {
-        gameControls.style.display = "flex"; // show buttons
-        isFullscreen = false;
+        gameControls.style.display = "flex";
       }
-    }
+    });
   </script>
 </body>
 </html>
