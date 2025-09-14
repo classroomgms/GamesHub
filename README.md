@@ -10,10 +10,8 @@ This project disguises the browser tab as **Google Classroom**, including both t
 - Open Source! So you can create your own Unblocked Games!
 
 ## Notes
-- I will try to add ADOFAI demo on the page soon.
-- some games might not work, If the game say to use itch.io, it's been detected.
+- This project use github.io, itch.io, and gamenora games.
+- some games might not work, If the game say to use itch.io, I will either delete it or change new provider.
 
 ## Disclaimer
 This project is for educational purposes only. Use responsibly.
-
-This project uses github.io games, and itch.io games. Play at your own risks.
