@@ -35,12 +35,15 @@
       height: 32px;
       border-radius: 6px;
     }
-    .game-grid {
+    .games-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(4, 1fr); /* PC default */
       gap: 20px;
-      padding: 20px;
-      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      .games-grid {
+        grid-template-columns: repeat(2, 1fr); /* phones */
     }
     .game-card {
       background: white;
