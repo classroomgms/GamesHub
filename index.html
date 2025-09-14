@@ -35,16 +35,19 @@
       height: 32px;
       border-radius: 6px;
     }
+
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr); /* PC default */
+      grid-template-columns: repeat(4, 1fr);
       gap: 20px;
+      padding: 20px;
     }
-
     @media (max-width: 768px) {
       .games-grid {
-        grid-template-columns: repeat(2, 1fr); /* phones */
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
+
     .game-card {
       background: white;
       border-radius: 12px;
@@ -80,6 +83,7 @@
       font-size: 16px;
       text-align: left;
     }
+
     #gameScreen {
       display: none;
       padding: 20px;
@@ -134,26 +138,13 @@
     .game-controls button:hover {
       background: #3889c6;
     }
-
-    /* Responsive grid */
-    @media (max-width: 768px) {
-      .game-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (max-width: 480px) {
-      .game-grid {
-        grid-template-columns: 1fr;
-      }
-    }
   </style>
 </head>
 <body>
   <header id="mainHeader">🎮 POWBoy1’s Game Hub 🎮</header>
 
-  <div id="mainMenu" class="game-grid"></div>
+  <div id="mainMenu" class="games-grid"></div>
 
-  <!-- Game Screen -->
   <div id="gameScreen">
     <div class="iframe-container">
       <iframe id="gameFrame" src=""></iframe>
@@ -167,41 +158,11 @@
 
   <script>
     const games = [
-      { 
-        key: "sprunki", 
-        title: "Incredibox - Sprunki", 
-        icon: "assets/sprunki-icon.png", 
-        thumbnail: "assets/sprunki-thumb.png", 
-        url: "https://powboy1.github.io/Incredibox-Sprunki/" 
-      },
-      { 
-        key: "fnf", 
-        title: "Friday Night Funkin", 
-        icon: "assets/fnf-icon.png", 
-        thumbnail: "assets/fnf-thumb.png", 
-        url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" 
-      },
-      { 
-        key: "ssb", 
-        title: "Solar Sandbox", 
-        icon: "assets/ssb-icon.png", 
-        thumbnail: "assets/ssb-thumb.png", 
-        url: "https://html.itch.zone/html/14937308/HTML/index.html" 
-      },
-      { 
-        key: "wbwwb", 
-        title: "We Become What We Behold", 
-        icon: "assets/wbwwb-icon.png", 
-        thumbnail: "assets/wbwwb-thumb.png", 
-        url: "https://webecomewhatwebehold.github.io/file/" 
-      }
-      { 
-        key: "polytrack", 
-        title: "PolyTrack", 
-        icon: "assets/polytrack-icon.png", 
-        thumbnail: "assets/polytrack-thumb.png", 
-        url: "https://html-classic.itch.zone/html/14308892/index.html" 
-      }
+      { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
+      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
+      { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://html.itch.zone/html/14937308/HTML/index.html" },
+      { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://webecomewhatwebehold.github.io/file/" },
+      { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://html-classic.itch.zone/html/14308892/index.html" }
     ];
 
     const mainMenu = document.getElementById("mainMenu");
@@ -211,7 +172,6 @@
     const mainHeader = document.getElementById("mainHeader");
     const gameControls = document.querySelector(".game-controls");
 
-    // Build grid dynamically
     games.forEach(game => {
       const card = document.createElement("div");
       card.className = "game-card";
@@ -259,7 +219,6 @@
       }
     }
 
-    // Track fullscreen state
     document.addEventListener("fullscreenchange", () => {
       if (document.fullscreenElement === gameFrame) {
         gameControls.style.display = "none";
