@@ -11,7 +11,7 @@ This project disguises the browser tab as **Google Classroom**, including both t
 
 ## Notes
 - This project use github.io, itch.io, and gamenora games.
-- some games might not work, If the game say to use itch.io, I will either delete it or change new provider.
+- some games might not work, If the game say to use itch.io or some sort, I will either delete it or change to a new provider.
 
 ## Disclaimer
 This project is for educational purposes only. Use responsibly.
