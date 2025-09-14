@@ -1,231 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
-  <link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
-
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f4f9;
-      color: #333;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background: #4cafef;
-      color: white;
-      padding: 20px;
-      font-size: 24px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      flex-shrink: 0;
-    }
-    header img {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-    }
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home</title>
+<link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f9;
+    color: #333;
+    text-align: center;
+  }
+  header {
+    background: #4cafef;
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  header img {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+  @media (max-width: 768px) {
     .games-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-      padding: 20px;
+      grid-template-columns: repeat(2, 1fr);
     }
-    @media (max-width: 768px) {
-      .games-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    .game-card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .game-card:hover {
-      transform: scale(1.05);
-    }
-    .game-thumbnail {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-bottom: 1px solid #ddd;
-    }
-    .game-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-    }
-    .game-info img {
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-    }
-    .game-info h3 {
-      margin: 0;
-      font-size: 16px;
-      text-align: left;
-    }
-
-    #gameScreen {
-      display: none;
-      padding: 20px;
-      position: relative;
-      flex: 1;
-    }
-    .iframe-container {
-      position: relative;
-      width: 90%;
-      margin: 0 auto;
-      height: 600px;
-      max-width: 1200px;
-    }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 10px;
-      display: none;
-    }
-    .iframe-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-    .game-controls {
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-    .game-controls button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      background: #4cafef;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .game-controls button:hover {
-      background: #3889c6;
-    }
-  </style>
+  }
+  .game-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .game-card:hover {
+    transform: scale(1.05);
+  }
+  .game-thumbnail {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+  }
+  .game-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+  }
+  .game-info img {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+  }
+  .game-info h3 {
+    margin: 0;
+    font-size: 16px;
+    text-align: left;
+  }
+  #gameScreen {
+    display: none;
+    padding: 20px;
+    position: relative;
+  }
+  .iframe-container {
+    position: relative;
+    width: 90%;
+    margin: 0 auto;
+    height: 600px;
+    max-width: 1200px;
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+    display: none;
+  }
+  .iframe-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  .game-controls {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .game-controls button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background: #4cafef;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .game-controls button:hover {
+    background: #3889c6;
+  }
+</style>
 </head>
 <body>
-  <header id="mainHeader">🎮 POWBoy1’s Game Hub 🎮</header>
+<header id="mainHeader">🎮 POWBoy1’s Game Hub 🎮</header>
 
-  <div id="mainMenu" class="games-grid"></div>
+<div id="mainMenu" class="games-grid"></div>
 
-  <div id="gameScreen">
-    <div class="iframe-container">
-      <iframe id="gameFrame" src=""></iframe>
-      <div id="iframeOverlay" class="iframe-overlay">Click to Play</div>
-    </div>
-    <div class="game-controls">
-      <button onclick="backToHub()">⬅ Back to Hub</button>
-      <button onclick="toggleFullscreen()">Fullscreen</button>
-    </div>
+<div id="gameScreen">
+  <div class="iframe-container">
+    <iframe id="gameFrame" src=""></iframe>
+    <div id="iframeOverlay" class="iframe-overlay">Click to Play</div>
   </div>
+  <div class="game-controls">
+    <button onclick="backToHub()">⬅ Back to Hub</button>
+    <button onclick="toggleFullscreen()">Fullscreen</button>
+  </div>
+</div>
 
-  <script>
-    const games = [
-      { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
-      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
-      { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://html.itch.zone/html/14937308/HTML/index.html" },
-      { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://webecomewhatwebehold.github.io/file/" },
-      { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://html-classic.itch.zone/html/14308892/index.html" }
-    ];
+<script>
+const games = [
+  { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
+  { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
+  { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://html.itch.zone/html/14937308/HTML/index.html" },
+  { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://webecomewhatwebehold.github.io/file/" },
+  { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://html-classic.itch.zone/html/14308892/index.html" }
+];
 
-    const mainMenu = document.getElementById("mainMenu");
-    const gameScreen = document.getElementById("gameScreen");
-    const gameFrame = document.getElementById("gameFrame");
-    const iframeOverlay = document.getElementById("iframeOverlay");
-    const mainHeader = document.getElementById("mainHeader");
-    const gameControls = document.querySelector(".game-controls");
+const mainMenu = document.getElementById("mainMenu");
+const gameScreen = document.getElementById("gameScreen");
+const gameFrame = document.getElementById("gameFrame");
+const iframeOverlay = document.getElementById("iframeOverlay");
+const mainHeader = document.getElementById("mainHeader");
+const gameControls = document.querySelector(".game-controls");
 
-    games.forEach(game => {
-      const card = document.createElement("div");
-      card.className = "game-card";
-      card.innerHTML = `
-        <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
-        <div class="game-info">
-          <img src="${game.icon}" alt="${game.title} icon">
-          <h3>${game.title}</h3>
-        </div>
-      `;
-      card.addEventListener("click", () => openGame(game));
-      mainMenu.appendChild(card);
-    });
+games.forEach(game => {
+  const card = document.createElement("div");
+  card.className = "game-card";
+  card.innerHTML = `
+    <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
+    <div class="game-info">
+      <img src="${game.icon}" alt="${game.title} icon">
+      <h3>${game.title}</h3>
+    </div>
+  `;
+  card.addEventListener("click", () => openGame(game));
+  mainMenu.appendChild(card);
+});
 
-    function openGame(game) {
-      gameFrame.src = game.url;
-      gameFrame.style.display = "none";
-      iframeOverlay.style.display = "flex";
-      gameScreen.style.display = "block";
-      mainMenu.style.display = "none";
-      mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon"> ${game.title}`;
-      gameControls.style.display = "flex";
-    }
+function openGame(game) {
+  gameFrame.src = game.url;
+  gameFrame.style.display = "none";
+  iframeOverlay.style.display = "flex";
+  gameScreen.style.display = "block";
+  mainMenu.style.display = "none";
+  mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon"> ${game.title}`;
+  gameControls.style.display = "flex";
+}
 
-    iframeOverlay.addEventListener("click", () => {
-      iframeOverlay.style.display = "none";
-      gameFrame.style.display = "block";
-    });
+iframeOverlay.addEventListener("click", () => {
+  iframeOverlay.style.display = "none";
+  gameFrame.style.display = "block";
+});
 
-    function backToHub() {
-      gameScreen.style.display = "none";
-      mainMenu.style.display = "grid";
-      gameFrame.src = "";
-      gameFrame.style.display = "none";
-      iframeOverlay.style.display = "none";
-      mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
-      exitFullscreen();
-    }
+function backToHub() {
+  gameScreen.style.display = "none";
+  mainMenu.style.display = "grid";
+  gameFrame.src = "";
+  gameFrame.style.display = "none";
+  iframeOverlay.style.display = "none";
+  mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
+  if (document.fullscreenElement) document.exitFullscreen();
+}
 
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        gameFrame.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    }
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    gameFrame.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
 
-    document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement === gameFrame) {
-        gameControls.style.display = "none";
-      } else {
-        gameControls.style.display = "flex";
-      }
-    });
-  </script>
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement === gameFrame) {
+    gameControls.style.display = "none";
+  } else {
+    gameControls.style.display = "flex";
+  }
+});
+</script>
 </body>
 </html>
