@@ -6,15 +6,19 @@
 <title>Home</title>
 <link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
 <style>
-  body {
-    font-family: Arial, sans-serif;
+  html, body {
     margin: 0;
     padding: 0;
-    background: #f4f4f9;
-    color: #333;
+    height: 100%;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
+    background: #f4f4f9;
+    color: #333;
   }
 
   header {
@@ -37,24 +41,24 @@
 
   .games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 250px);
-    justify-content: center;
+    grid-template-columns: repeat(7, 1fr); /* 7 per row */
     gap: 20px;
     padding: 20px;
-    flex: 1;
-    width: 100%;
+    justify-items: center; /* center items horizontally */
+    align-items: start; /* prevent stretching */
   }
 
   .game-card {
     width: 250px;
+    height: 250px; /* fixed height */
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     cursor: pointer;
-    transition: transform 0.2s ease;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.2s ease;
   }
 
   .game-card:hover {
@@ -153,7 +157,7 @@
     font-size: 14px;
     color: #333;
     text-align: center;
-    flex-shrink: 0;
+    margin-top: auto; /* keeps footer at bottom */
   }
 </style>
 </head>
@@ -183,6 +187,7 @@ const games = [
   { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://webecomewhatwebehold.github.io/file/" },
   { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://html-classic.itch.zone/html/14308892/index.html" },
   { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://www.gamenora.com/embed/a-dance-of-fire-and-ice" }
+  { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "https://www.gamenora.com/embed/minecraft" }
 ];
 
 const mainMenu = document.getElementById("mainMenu");
