@@ -74,7 +74,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: white; /* changed from black to white */
+      background: white;
       position: relative;
     }
 
@@ -111,10 +111,10 @@
 
     .back-button {
       position: absolute;
-      top: 10px; /* updated top */
+      top: 10px;
       left: 20px;
       padding: 8px 12px;
-      background: red; /* updated color */
+      background: red;
       color: white;
       border: none;
       border-radius: 5px;
@@ -176,6 +176,9 @@
   </footer>
 
   <script>
+    const placeholderIcon = "assets/holder-icon.png";
+    const placeholderThumb = "assets/holder-thumb.png";
+
     const games = [
       { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
       { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
@@ -185,12 +188,11 @@
       { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://www.gamenora.com/embed/a-dance-of-fire-and-ice" },
       { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "https://www.gamenora.com/embed/minecraft" },
       { key: "monkeymart", title: "Monkey Mart", icon: "assets/monkeymart-icon.png", thumbnail: "assets/monkeymart-thumb.png", url: "https://www.gamenora.com/embed/monkey-mart" },
-      { key: "dashmetry", title: "Dashmetry", icon: "assets/dashmetry-icon.png", thumbnail: "assets/dashmetry-thumb.png", urlw: "https://www.miniplay.com/embed/geometry-dash-dashmetry" },
-      { key: "PapaPizza", title: "Papa's Pizzaria", icon: "assets/PapaPizza-icon.png", thumbnail: "assets/PapaPizza-thumb.png", urlw: "https://www.gamenora.com/embed/papas-pizzeria" },
-      { key: "PapaFreez", title: "Papa's Freezeria", icon: "assets/PapaFreez-icon.png", thumbnail: "assets/PapaFreez-thumb.png", urlw: "https://www.gamenora.com/embed/papas-freezeria" },
-      { key: "PapaSushi", title: "Papa's Sushiria", icon: "assets/PapaSushi-icon.png", thumbnail: "assets/PapaSushi-thumb.png", urlw: "https://www.gamenora.com/embed/papas-sushiria" },
-      { key: "PapaPasta", title: "Papa's Pastaria", icon: "assets/PapaPasta-icon.png", thumbnail: "assets/PapaPasta-thumb.png", urlw: "https://www.gamenora.com/embed/papas-pastaria-" }
-      // { key: "holder", title: "Holder Game", icon: "assets/holder-icon.png", thumbnail: "assets/holder-thumb.png", urlw: "holder.com/html.index" }
+      { key: "dashmetry", title: "Dashmetry", icon: "assets/dashmetry-icon.png", thumbnail: "assets/dashmetry-thumb.png", url: "https://www.miniplay.com/embed/geometry-dash-dashmetry" },
+      { key: "PapaPizza", title: "Papa's Pizzaria", icon: "assets/PapaPizza-icon.png", thumbnail: "assets/PapaPizza-thumb.png", url: "https://www.gamenora.com/embed/papas-pizzeria" },
+      { key: "PapaFreez", title: "Papa's Freezeria", icon: "assets/PapaFreez-icon.png", thumbnail: "assets/PapaFreez-thumb.png", url: "https://www.gamenora.com/embed/papas-freezeria" },
+      { key: "PapaSushi", title: "Papa's Sushiria", icon: "assets/PapaSushi-icon.png", thumbnail: "assets/PapaSushi-thumb.png", url: "https://www.gamenora.com/embed/papas-sushiria" },
+      { key: "PapaPasta", title: "Papa's Pastaria", icon: "assets/PapaPasta-icon.png", thumbnail: "assets/PapaPasta-thumb.png", url: "https://www.gamenora.com/embed/papas-pastaria-" }
     ];
 
     const mainMenu = document.getElementById("mainMenu");
@@ -206,9 +208,9 @@
       const card = document.createElement("div");
       card.className = "game-card";
       card.innerHTML = `
-        <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}">
+        <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
         <div class="game-info">
-          <img src="${game.icon}" alt="${game.title} icon">
+          <img src="${game.icon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
           <h3>${game.title}</h3>
         </div>
       `;
@@ -223,7 +225,7 @@
       gameScreen.style.display = "flex";
       mainMenu.style.display = "none";
       backButton.style.display = "block";
-      mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon"> ${game.title}`;
+      mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'"> ${game.title}`;
       gameControls.style.display = "flex";
       centerIframe();
     }
