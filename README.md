@@ -7,7 +7,7 @@ This project disguises the browser tab as **Google Classroom**, including both t
 - Google Classroom style **tab name**
 - Google Classroom style **icon**
 - Easy to use, just open and play
-- Open Source! So you can create your own Unblocked Games!
+- Open Source! So you can create your own Games Hub!
 
 ## Notes
 - This project use a lot of different website for the games, So some of them might not work/Blocked.
