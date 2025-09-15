@@ -182,22 +182,29 @@
   <script>
     const placeholderIcon = "assets/holder-icon.png";
     const placeholderThumb = "assets/holder-thumb.png";
-
+    // List of games, each with title, icon, thumbnail, and URL
     const games = [
       { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
-      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://html-classic.itch.zone/html/2876359-1370806/index.html" },
-      { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://html.itch.zone/html/14937308/HTML/index.html" },
-      { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://www.gamenora.com/embed/we-become-what-we-behold" },
-      { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://html-classic.itch.zone/html/14308892/index.html" },
-      { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://www.gamenora.com/embed/a-dance-of-fire-and-ice" },
-      { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "https://www.gamenora.com/embed/minecraft" },
-      { key: "monkeymart", title: "Monkey Mart", icon: "assets/monkeymart-icon.png", thumbnail: "assets/monkeymart-thumb.png", url: "https://www.gamenora.com/embed/monkey-mart" },
-      { key: "dashmetry", title: "Dashmetry", icon: "assets/dashmetry-icon.png", thumbnail: "assets/dashmetry-thumb.png", url: "https://www.miniplay.com/embed/geometry-dash-dashmetry" },
-      { key: "PapaPizza", title: "Papa's Pizzaria", icon: "assets/PapaPizza-icon.png", thumbnail: "assets/PapaPizza-thumb.png", url: "https://www.gamenora.com/embed/papas-pizzeria" },
-      { key: "PapaFreez", title: "Papa's Freezeria", icon: "assets/PapaFreez-icon.png", thumbnail: "assets/PapaFreez-thumb.png", url: "https://www.gamenora.com/embed/papas-freezeria" },
-      { key: "PapaSushi", title: "Papa's Sushiria", icon: "assets/PapaSushi-icon.png", thumbnail: "assets/PapaSushi-thumb.png", url: "https://www.gamenora.com/embed/papas-sushiria" },
-      { key: "PapaPasta", title: "Papa's Pastaria", icon: "assets/PapaPasta-icon.png", thumbnail: "assets/PapaPasta-thumb.png", url: "https://www.gamenora.com/embed/papas-pastaria-" },
-      { key: "Test1", title: "gameTest01220370", url: "https://eaglercraft-unblocked.neocities.org/188/" }
+      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://mod.fnfhub.net/26860/" },
+      { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://powboy1.github.io/DomainWIP/" },
+      { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://only-games.github.io/projects/wbwwb/index.html" },
+      { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://polytrack-online.github.io/file/" },
+      { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://htmlxm.github.io/h8/a-dance-of-fire-and-ice/" },
+      { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "https://eaglercraft-unblocked.neocities.org/188/" },
+      { key: "monkeymart", title: "Monkey Mart", icon: "assets/monkeymart-icon.png", thumbnail: "assets/monkeymart-thumb.png", url: "https://storeg223.github.io/g77/class-829" },
+      { key: "geodash", title: "Geometry Dash", icon: "assets/geodash-icon.png", thumbnail: "assets/geodash-thumb.png", url: "https://geometry-dash-lite.io/gdl/" },
+      { key: "cookie", title: "Cookie Clicker", icon: "assets/cookie-icon.png", thumbnail: "assets/cookie-thumb.png", url: "https://actedu15.github.io/g5/class-448" },
+      { key: "agario", title: "Agar.io", icon: "assets/agario-icon.png", thumbnail: "assets/agario-thumb.png", url: "https://powboy1.github.io/DomainWIP/" },
+      { key: "leveldevil", title: "The Level Devil", icon: "assets/leveldevil-icon.png", thumbnail: "assets/leveldevil-thumb.png", url: "https://6x-classroom.io/class412/level-devil/" },
+      { key: "tetris", title: "Tetris", icon: "assets/tetris-icon.png", thumbnail: "assets/tetris-thumb.png", url: "https://djblue.github.io/tetris/" },
+      { key: "AmongUs", title: "Among Us", icon: "assets/amongus-icon.png", thumbnail: "assets/amongus-thumb.png", url: "https://only-games.github.io/projects/among-us/index.htm" },
+      { key: "PapaPizza", title: "Papa's Pizzaria", icon: "assets/PapaPizza-icon.png", thumbnail: "assets/PapaPizza-thumb.png", url: "https://bitent.com/swf/papas_pizzeria/" },
+      { key: "PapaFreez", title: "Papa's Freezeria", icon: "assets/PapaFreez-icon.png", thumbnail: "assets/PapaFreez-thumb.png", url: "https://en.gameslol.net/data/awayjs/papa/freezeria.html" },
+      { key: "PapaSushi", title: "Papa's Sushiria", icon: "assets/PapaSushi-icon.png", thumbnail: "assets/PapaSushi-thumb.png", url: "https://www.gameslol.net/data/waflash/index.php?g=1285" },
+      { key: "PapaPasta", title: "Papa's Pastaria", icon: "assets/PapaPasta-icon.png", thumbnail: "assets/PapaPasta-thumb.png", url: "https://www.getgames.io/games/waflash/?swf=papaspastaria.swf&name=Papa%27s%20Pastaria" },
+      { key: "PapaBurger", title: "Papa's Burgeria", icon: "assets/PapaBurger-icon.png", thumbnail: "assets/PapaBurger-thumb.png", url: "https://www.getgames.io/games/waflash/?swf=papaspastaria.swf&name=Papa%27s%20Pastaria" },
+      { key: "PapaTaco", title: "Papa's Taco Mia!", icon: "assets/PapaTaco-icon.png", thumbnail: "assets/PapaTaco-thumb.png", url: "https://www.getgames.io/games/awayfl/v2/?swf=papastacomia.swf" },
+      { key: "PapaDonut", title: "Papa's Donuteria", icon: "assets/PapaDonut-icon.png", thumbnail: "assets/PapaDonut-thumb.png", url: "https://www.getgames.io/games/ruffle/?swf=papasdonuteria.swf&name=Papa%27s%20Doggeria&warn=false" }
     ];
 
     const mainMenu = document.getElementById("mainMenu");
