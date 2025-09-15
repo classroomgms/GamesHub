@@ -148,7 +148,11 @@
       color: white;
       text-align: center;
       padding: 10px;
-      margin-top: auto;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 20;
     }
   </style>
 </head>
@@ -209,9 +213,9 @@
       const card = document.createElement("div");
       card.className = "game-card";
       card.innerHTML = `
-        <img class="game-thumbnail" src="${game.thumbnail}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
+        <img class="game-thumbnail" src="${game.thumbnail || placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
         <div class="game-info">
-          <img src="${game.icon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
+          <img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
           <h3>${game.title}</h3>
         </div>
       `;
@@ -226,7 +230,7 @@
       gameScreen.style.display = "flex";
       mainMenu.style.display = "none";
       backButton.style.display = "block";
-      mainHeader.innerHTML = `<img src="${game.icon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'"> ${game.title}`;
+      mainHeader.innerHTML = `<img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'"> ${game.title}`;
       gameControls.style.display = "flex";
       centerIframe();
     }
