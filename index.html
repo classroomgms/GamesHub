@@ -8,30 +8,52 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f4f4;
+      background: #fff;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
 
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
       background: #2c7be5;
       color: white;
       padding: 15px;
       text-align: center;
       font-size: 24px;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
     }
+
     header img {
       height: 24px;
       vertical-align: middle;
       margin-right: 8px;
     }
 
+    .back-button {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      padding: 8px 12px;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      display: none;
+      z-index: 1100;
+      transition: opacity 0.3s ease;
+    }
+
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      padding: 20px;
+      padding: 100px 20px 80px; /* room for header + footer */
       flex: 1;
     }
 
@@ -76,6 +98,8 @@
       justify-content: center;
       background: white;
       position: relative;
+      padding-top: 80px; /* avoid header overlap */
+      padding-bottom: 60px; /* avoid footer overlap */
     }
 
     .iframe-wrapper {
@@ -109,20 +133,6 @@
       z-index: 5;
     }
 
-    .back-button {
-      position: absolute;
-      top: 10px;
-      left: 20px;
-      padding: 8px 12px;
-      background: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      display: none;
-      z-index: 10;
-    }
-
     .game-controls {
       display: flex;
       justify-content: center;
@@ -130,7 +140,7 @@
       padding: 10px;
       background: #222;
       position: absolute;
-      bottom: 10px;
+      bottom: 20px;
     }
 
     .game-controls button {
@@ -152,7 +162,14 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      z-index: 20;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
+    }
+
+    /* Hidden state for fullscreen */
+    .hidden {
+      opacity: 0;
+      pointer-events: none;
     }
   </style>
 </head>
@@ -171,18 +188,18 @@
       <iframe id="gameFrame"></iframe>
     </div>
     <div class="game-controls">
-      <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+      <button onclick="toggleFullscreen()" id="fullscreenBtn">⛶ Fullscreen</button>
     </div>
   </div>
 
-  <footer>
+  <footer id="mainFooter">
     Made by POWBoy1
   </footer>
 
   <script>
     const placeholderIcon = "assets/holder-icon.png";
     const placeholderThumb = "assets/holder-thumb.png";
-    // List of games, each with title, icon, thumbnail, and URL
+
     const games = [
       { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
       { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://powboy1.github.io/Friday-Night-Funkin" },
@@ -215,6 +232,8 @@
     const backButton = document.getElementById("backButton");
     const gameControls = document.querySelector(".game-controls");
     const iframeWrapper = document.querySelector(".iframe-wrapper");
+    const mainFooter = document.getElementById("mainFooter");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
 
     games.forEach(game => {
       const card = document.createElement("div");
@@ -278,10 +297,20 @@
 
     document.addEventListener("fullscreenchange", () => {
       if (document.fullscreenElement === gameFrame) {
+        // Hide UI
+        mainHeader.classList.add("hidden");
+        mainFooter.classList.add("hidden");
+        backButton.classList.add("hidden");
+        fullscreenBtn.textContent = "❌ Exit Fullscreen";
         gameControls.style.display = "none";
         iframeWrapper.style.marginTop = "0";
         iframeWrapper.style.marginBottom = "0";
       } else {
+        // Restore UI
+        mainHeader.classList.remove("hidden");
+        mainFooter.classList.remove("hidden");
+        backButton.classList.remove("hidden");
+        fullscreenBtn.textContent = "⛶ Fullscreen";
         gameControls.style.display = "flex";
         centerIframe();
       }
