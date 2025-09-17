@@ -8,13 +8,10 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      background: #f0f0f0;
     }
 
-    /* Header / Top Bar */
+    /* Header / Top Bar for main menu */
     header {
       position: fixed;
       top: 0;
@@ -29,36 +26,14 @@
       font-size: 20px;
       font-weight: bold;
       z-index: 1000;
-      transition: opacity 0.3s ease;
     }
 
-    header img {
-      height: 24px;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
-
-    .back-button {
-      position: absolute;
-      left: 20px;
-      background: red;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      color: white;
-      font-weight: bold;
-      display: none;
-      z-index: 1100;
-    }
-
-    /* Games menu grid */
+    /* Main menu grid */
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      padding: 100px 20px 80px; /* room for header + footer */
-      flex: 1;
+      padding: 100px 20px 80px;
     }
 
     .game-card {
@@ -94,35 +69,44 @@
       margin-right: 10px;
     }
 
-    /* Game Screen */
-    .game-screen {
+    /* Game Screen CSS (KBH style) */
+    #gameScreen {
       display: none;
-      flex: 1;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      background: white;
-      padding-top: 80px; /* avoid header overlap */
-      padding-bottom: 60px; /* avoid footer overlap */
+    }
+
+    .game-header {
+      width: 100%;
+      background: #2c7be5;
+      color: white;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
 
     .game-container {
-      background: white;
-      border: 12px solid #2c7be5;
-      border-radius: 24px;
+      position: relative;
       width: 80%;
       max-width: 1200px;
+      margin: 120px auto 30px auto; /* room for header + spacing */
       aspect-ratio: 16/9;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
     }
 
     iframe {
       width: 100%;
       height: 100%;
       border: none;
-      border-radius: 12px;
       display: none;
     }
 
@@ -131,20 +115,25 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.7);
+      background: rgba(44,123,229,0.85);
       color: white;
-      padding: 20px 40px;
-      border-radius: 10px;
-      font-size: 18px;
+      padding: 25px 50px;
+      border-radius: 12px;
+      font-size: 24px;
+      font-weight: bold;
       cursor: pointer;
+      transition: background 0.3s;
       z-index: 5;
     }
 
-    /* Fullscreen Button floating on game */
+    .overlay:hover {
+      background: rgba(44,123,229,1);
+    }
+
     .fullscreen-btn {
       position: absolute;
-      bottom: -40px;
-      right: 20px;
+      bottom: 15px;
+      right: 15px;
       background: #2c7be5;
       color: white;
       padding: 10px 18px;
@@ -153,53 +142,55 @@
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
+      z-index: 10;
     }
 
-    /* Footer */
-    footer {
+    .back-button {
+      position: fixed;
+      top: 70px;
+      left: 20px;
+      background: #ff4c4c;
+      color: white;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1100;
+      display: none;
+    }
+
+    .game-footer {
+      width: 100%;
       background: #2c7be5;
       color: white;
       text-align: center;
       padding: 12px;
+      font-weight: bold;
       position: fixed;
       bottom: 0;
       left: 0;
-      width: 100%;
-      z-index: 1000;
-      font-weight: bold;
-      transition: opacity 0.3s ease;
-    }
-
-    /* Hidden state for fullscreen */
-    .hidden {
-      opacity: 0;
-      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header id="mainHeader">
-    <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
-    🎮 POWBoy1’s Game Hub 🎮
-  </header>
+  <!-- Main Menu Header -->
+  <header>🎮 POWBoy1’s Game Hub 🎮</header>
 
   <!-- Main Menu -->
   <div id="mainMenu" class="games-grid"></div>
 
   <!-- Game Screen -->
-  <div id="gameScreen" class="game-screen">
+  <div id="gameScreen">
+    <div class="game-header" id="gameTitle">Game Title</div>
     <div class="game-container">
       <div id="iframeOverlay" class="overlay">▶ Play</div>
       <iframe id="gameFrame"></iframe>
-      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
+      <button id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
     </div>
+    <button id="backButton" class="back-button" onclick="backToHub()">⬅ Back</button>
+    <div class="game-footer">Made by POWBoy1</div>
   </div>
-
-  <!-- Footer -->
-  <footer id="mainFooter">
-    Made by POWBoy1
-  </footer>
 
   <script>
     const placeholderIcon = "assets/holder-icon.png";
@@ -207,37 +198,19 @@
 
     const games = [
       { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "https://powboy1.github.io/Incredibox-Sprunki/" },
-      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://powboy1.github.io/Friday-Night-Funkin" },
-      { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://powboy1.github.io/DomainWIP/" },
-      { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://only-games.github.io/projects/wbwwb/index.html" },
-      { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://polytrack-online.github.io/file/" },
-      { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://htmlxm.github.io/h8/a-dance-of-fire-and-ice/" },
-      { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "https://eaglercraft-unblocked.neocities.org/188/" },
-      { key: "monkeymart", title: "Monkey Mart", icon: "assets/monkeymart-icon.png", thumbnail: "assets/monkeymart-thumb.png", url: "https://storeg223.github.io/g77/class-829" },
-      { key: "geodash", title: "Geometry Dash", icon: "assets/geodash-icon.png", thumbnail: "assets/geodash-thumb.png", url: "https://geometrydashonline.github.io/" },
-      { key: "cookie", title: "Cookie Clicker", icon: "assets/cookie-icon.png", thumbnail: "assets/cookie-thumb.png", url: "https://actedu15.github.io/g5/class-448" },
-      { key: "agario", title: "Agar.io", icon: "assets/agario-icon.png", thumbnail: "assets/agario-thumb.png", url: "https://powboy1.github.io/DomainWIP/" },
-      { key: "leveldevil", title: "Level Devil", icon: "assets/leveldevil-icon.png", thumbnail: "assets/leveldevil-thumb.png", url: "https://6x-classroom.io/class412/level-devil/" },
-      { key: "tetris", title: "Tetris", icon: "assets/tetris-icon.png", thumbnail: "assets/tetris-thumb.png", url: "https://djblue.github.io/tetris/" },
-      { key: "AmongUs", title: "Among Us", icon: "assets/amongus-icon.png", thumbnail: "assets/amongus-thumb.png", url: "https://only-games.github.io/projects/among-us/index.htm" },
-      { key: "PapaPizza", title: "Papa's Pizzaria", icon: "assets/PapaPizza-icon.png", thumbnail: "assets/PapaPizza-thumb.png", url: "https://bitent.com/swf/papas_pizzeria/" },
-      { key: "PapaFreez", title: "Papa's Freezeria", icon: "assets/PapaFreez-icon.png", thumbnail: "assets/PapaFreez-thumb.png", url: "https://en.gameslol.net/data/awayjs/papa/freezeria.html" },
-      { key: "PapaSushi", title: "Papa's Sushiria", icon: "assets/PapaSushi-icon.png", thumbnail: "assets/PapaSushi-thumb.png", url: "https://www.gameslol.net/data/waflash/index.php?g=1285" },
-      { key: "PapaPasta", title: "Papa's Pastaria", icon: "assets/PapaPasta-icon.png", thumbnail: "assets/PapaPasta-thumb.png", url: "https://www.getgames.io/games/waflash/?swf=papaspastaria.swf&name=Papa%27s%20Pastaria" },
-      { key: "PapaBurger", title: "Papa's Burgeria", icon: "assets/PapaBurger-icon.png", thumbnail: "assets/PapaBurger-thumb.png", url: "https://www.getgames.io/games/waflash/?swf=papaspastaria.swf&name=Papa%27s%20Pastaria" },
-      { key: "PapaTaco", title: "Papa's Taco Mia!", icon: "assets/PapaTaco-icon.png", thumbnail: "assets/PapaTaco-thumb.png", url: "https://www.getgames.io/games/awayfl/v2/?swf=papastacomia.swf" },
-      { key: "PapaDonut", title: "Papa's Donuteria", icon: "assets/PapaDonut-icon.png", thumbnail: "assets/PapaDonut-thumb.png", url: "https://www.getgames.io/games/ruffle/?swf=papasdonuteria.swf&name=Papa%27s%20Doggeria&warn=false" }
+      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "https://powboy1.github.io/Friday-Night-Funkin" }
+      // Add more games as needed
     ];
 
     const mainMenu = document.getElementById("mainMenu");
     const gameScreen = document.getElementById("gameScreen");
     const gameFrame = document.getElementById("gameFrame");
     const iframeOverlay = document.getElementById("iframeOverlay");
-    const mainHeader = document.getElementById("mainHeader");
     const backButton = document.getElementById("backButton");
-    const mainFooter = document.getElementById("mainFooter");
     const fullscreenBtn = document.getElementById("fullscreenBtn");
+    const gameTitle = document.getElementById("gameTitle");
 
+    // Populate main menu
     games.forEach(game => {
       const card = document.createElement("div");
       card.className = "game-card";
@@ -253,13 +226,13 @@
     });
 
     function openGame(game) {
+      gameTitle.textContent = game.title;
       gameFrame.src = game.url;
-      gameFrame.style.display = "none";
       iframeOverlay.style.display = "flex";
+      gameFrame.style.display = "none";
       gameScreen.style.display = "flex";
-      mainMenu.style.display = "none";
       backButton.style.display = "block";
-      mainHeader.innerHTML = `<button class="back-button" onclick="backToHub()">⬅ Back</button> ${game.title}`;
+      mainMenu.style.display = "none";
     }
 
     iframeOverlay.addEventListener("click", () => {
@@ -269,36 +242,16 @@
 
     function backToHub() {
       gameScreen.style.display = "none";
-      mainMenu.style.display = "grid";
       gameFrame.src = "";
-      gameFrame.style.display = "none";
-      iframeOverlay.style.display = "none";
       backButton.style.display = "none";
-      mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
-      if (document.fullscreenElement) document.exitFullscreen();
+      mainMenu.style.display = "grid";
     }
 
-    function toggleFullscreen() {
+    fullscreenBtn.addEventListener("click", () => {
       if (!document.fullscreenElement) {
         gameFrame.requestFullscreen();
       } else {
         document.exitFullscreen();
-      }
-    }
-
-    document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement === gameFrame) {
-        // Hide UI
-        mainHeader.classList.add("hidden");
-        mainFooter.classList.add("hidden");
-        backButton.classList.add("hidden");
-        fullscreenBtn.textContent = "❌ Exit Fullscreen";
-      } else {
-        // Restore UI
-        mainHeader.classList.remove("hidden");
-        mainFooter.classList.remove("hidden");
-        backButton.classList.remove("hidden");
-        fullscreenBtn.textContent = "⛶ Fullscreen";
       }
     });
   </script>
