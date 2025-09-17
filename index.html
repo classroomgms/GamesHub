@@ -14,6 +14,7 @@
       min-height: 100vh;
     }
 
+    /* Header / Top Bar */
     header {
       position: fixed;
       top: 0;
@@ -22,8 +23,11 @@
       background: #2c7be5;
       color: white;
       padding: 15px;
-      text-align: center;
-      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
       z-index: 1000;
       transition: opacity 0.3s ease;
     }
@@ -35,20 +39,20 @@
     }
 
     .back-button {
-      position: fixed;
-      top: 10px;
+      position: absolute;
       left: 20px;
-      padding: 8px 12px;
       background: red;
-      color: white;
       border: none;
-      border-radius: 5px;
+      padding: 6px 12px;
+      border-radius: 6px;
       cursor: pointer;
+      color: white;
+      font-weight: bold;
       display: none;
       z-index: 1100;
-      transition: opacity 0.3s ease;
     }
 
+    /* Games menu grid */
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -90,32 +94,35 @@
       margin-right: 10px;
     }
 
+    /* Game Screen */
     .game-screen {
       display: none;
       flex: 1;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       background: white;
-      position: relative;
       padding-top: 80px; /* avoid header overlap */
       padding-bottom: 60px; /* avoid footer overlap */
     }
 
-    .iframe-wrapper {
-      width: 100%;
-      max-width: 1920px;
-      aspect-ratio: 16 / 9;
+    .game-container {
+      background: white;
+      border: 12px solid #2c7be5;
+      border-radius: 24px;
+      width: 80%;
+      max-width: 1200px;
+      aspect-ratio: 16/9;
+      position: relative;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: auto;
     }
 
     iframe {
       width: 100%;
       height: 100%;
       border: none;
+      border-radius: 12px;
       display: none;
     }
 
@@ -133,36 +140,33 @@
       z-index: 5;
     }
 
-    .game-controls {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px;
-      background: #222;
+    /* Fullscreen Button floating on game */
+    .fullscreen-btn {
       position: absolute;
-      bottom: 20px;
-    }
-
-    .game-controls button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+      bottom: -40px;
+      right: 20px;
       background: #2c7be5;
       color: white;
+      padding: 10px 18px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
       font-size: 14px;
+      font-weight: bold;
     }
 
+    /* Footer */
     footer {
       background: #2c7be5;
       color: white;
       text-align: center;
-      padding: 10px;
+      padding: 12px;
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
       z-index: 1000;
+      font-weight: bold;
       transition: opacity 0.3s ease;
     }
 
@@ -174,24 +178,25 @@
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header id="mainHeader">
+    <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
     🎮 POWBoy1’s Game Hub 🎮
   </header>
 
-  <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
-
+  <!-- Main Menu -->
   <div id="mainMenu" class="games-grid"></div>
 
+  <!-- Game Screen -->
   <div id="gameScreen" class="game-screen">
-    <div id="iframeOverlay" class="overlay">▶ Play</div>
-    <div class="iframe-wrapper">
+    <div class="game-container">
+      <div id="iframeOverlay" class="overlay">▶ Play</div>
       <iframe id="gameFrame"></iframe>
-    </div>
-    <div class="game-controls">
-      <button onclick="toggleFullscreen()" id="fullscreenBtn">⛶ Fullscreen</button>
+      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer id="mainFooter">
     Made by POWBoy1
   </footer>
@@ -230,8 +235,6 @@
     const iframeOverlay = document.getElementById("iframeOverlay");
     const mainHeader = document.getElementById("mainHeader");
     const backButton = document.getElementById("backButton");
-    const gameControls = document.querySelector(".game-controls");
-    const iframeWrapper = document.querySelector(".iframe-wrapper");
     const mainFooter = document.getElementById("mainFooter");
     const fullscreenBtn = document.getElementById("fullscreenBtn");
 
@@ -256,9 +259,7 @@
       gameScreen.style.display = "flex";
       mainMenu.style.display = "none";
       backButton.style.display = "block";
-      mainHeader.innerHTML = `<img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'"> ${game.title}`;
-      gameControls.style.display = "flex";
-      centerIframe();
+      mainHeader.innerHTML = `<button class="back-button" onclick="backToHub()">⬅ Back</button> ${game.title}`;
     }
 
     iframeOverlay.addEventListener("click", () => {
@@ -285,16 +286,6 @@
       }
     }
 
-    function centerIframe() {
-      const windowHeight = window.innerHeight;
-      const iframeHeight = iframeWrapper.offsetHeight;
-      const topMargin = Math.max((windowHeight - iframeHeight) / 2, 0);
-      iframeWrapper.style.marginTop = `${topMargin}px`;
-      iframeWrapper.style.marginBottom = `${topMargin}px`;
-    }
-
-    window.addEventListener("resize", centerIframe);
-
     document.addEventListener("fullscreenchange", () => {
       if (document.fullscreenElement === gameFrame) {
         // Hide UI
@@ -302,17 +293,12 @@
         mainFooter.classList.add("hidden");
         backButton.classList.add("hidden");
         fullscreenBtn.textContent = "❌ Exit Fullscreen";
-        gameControls.style.display = "none";
-        iframeWrapper.style.marginTop = "0";
-        iframeWrapper.style.marginBottom = "0";
       } else {
         // Restore UI
         mainHeader.classList.remove("hidden");
         mainFooter.classList.remove("hidden");
         backButton.classList.remove("hidden");
         fullscreenBtn.textContent = "⛶ Fullscreen";
-        gameControls.style.display = "flex";
-        centerIframe();
       }
     });
   </script>
