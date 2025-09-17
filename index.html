@@ -39,7 +39,8 @@
     }
 
     .back-button {
-      position: absolute;
+      position: fixed;
+      top: 12px;
       left: 20px;
       background: red;
       border: none;
@@ -49,7 +50,7 @@
       color: white;
       font-weight: bold;
       display: none;
-      z-index: 1100;
+      z-index: 9999;
     }
 
     /* Games menu grid */
@@ -259,7 +260,23 @@
       gameScreen.style.display = "flex";
       mainMenu.style.display = "none";
       backButton.style.display = "block";
-      mainHeader.innerHTML = `<button class="back-button" onclick="backToHub()">⬅ Back</button> ${game.title}`;
+
+      // Update header: keep back button, add game icon + title
+      mainHeader.innerHTML = '';
+      mainHeader.appendChild(backButton);
+
+      const icon = document.createElement('img');
+      icon.src = game.icon || placeholderIcon;
+      icon.alt = game.title + ' icon';
+      icon.style.height = '24px';
+      icon.style.verticalAlign = 'middle';
+      icon.style.marginRight = '8px';
+
+      const title = document.createElement('span');
+      title.textContent = game.title;
+
+      mainHeader.appendChild(icon);
+      mainHeader.appendChild(title);
     }
 
     iframeOverlay.addEventListener("click", () => {
