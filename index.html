@@ -277,7 +277,8 @@
     }
 
     function openGame(game) {
-      gameFrame.src = "";
+      const baseRepoUrl = 'https://POWBoy1.github.io/GameHubUpdater/';
+      gameFrame.src = game.url.startsWith('http') ? game.url : baseRepoUrl + game.url;
       gameFrame.style.display = "none";
       iframeOverlay.style.display = "flex";
       loadingOverlay.style.display = "none";
