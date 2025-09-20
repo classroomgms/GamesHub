@@ -299,32 +299,30 @@ function openGame(game) {
   mainHeader.appendChild(icon);
   mainHeader.appendChild(title);
 
-  // Set overlay background to thumbnail with a dark filter
+  // Set overlay background inside the game-container
   iframeOverlay.style.background = `
     linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
     url('${game.thumbnail}') center/cover no-repeat
   `;
   iframeOverlay.style.display = "flex";
-
-  // Ensure the overlay covers the iframe completely
   iframeOverlay.style.position = "absolute";
   iframeOverlay.style.top = 0;
   iframeOverlay.style.left = 0;
-  iframeOverlay.style.right = 0;
-  iframeOverlay.style.bottom = 0;
+  iframeOverlay.style.width = "100%";
+  iframeOverlay.style.height = "100%";
   iframeOverlay.style.justifyContent = "center";
   iframeOverlay.style.alignItems = "center";
+  iframeOverlay.style.borderRadius = "12px";
+  iframeOverlay.style.cursor = "pointer";
   iframeOverlay.style.zIndex = 5;
   iframeOverlay.style.color = "white";
   iframeOverlay.style.fontSize = "18px";
   iframeOverlay.style.fontWeight = "bold";
-  iframeOverlay.style.borderRadius = "12px";
-  iframeOverlay.style.cursor = "pointer";
 
   // Prepare iframe but don't load yet
   gameFrame.src = "";
   gameFrame.style.display = "block";
-  gameFrame.style.background = `none`;
+  gameFrame.style.background = "none";
   loadingOverlay.style.display = "none";
 
   // Click to play
