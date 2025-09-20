@@ -277,8 +277,7 @@
     }
 
 function openGame(game) {
-  const baseRepoUrl = 'https://POWBoy1.github.io/GameHubUpdater/';
-  gameFrame.src = ""; // Clear iframe initially
+  gameFrame.src = game.url; // just the relative path
   gameFrame.style.display = "none";
   iframeOverlay.style.display = "flex";
   loadingOverlay.style.display = "none";
@@ -303,26 +302,21 @@ function openGame(game) {
   mainHeader.appendChild(icon);
   mainHeader.appendChild(title);
 
-  // Set iframe background to the game's thumbnail
-  gameFrame.style.background = `url('${game.thumbnail || placeholderThumb}') center/cover no-repeat`;
-  gameFrame.style.borderRadius = '12px';
-
   // Play overlay click
   iframeOverlay.onclick = () => {
     iframeOverlay.style.display = "none";
     loadingOverlay.style.display = "flex";
-
-    // Use baseRepoUrl if game URL is relative
-    gameFrame.src = game.url.startsWith('http') ? game.url : baseRepoUrl + game.url;
-
+    gameFrame.src = game.url; // relative path works
     gameFrame.onload = () => {
       loadingOverlay.style.display = "none";
       gameFrame.style.display = "block";
-      // Remove background once the game loads
-      gameFrame.style.background = "none";
     };
   };
-}
+
+  // Set overlay background to game thumbnail
+  iframeOverlay.style.background = `url('${game.thumbnail}') center/cover no-repeat`;
+};
+
 
 
     function backToHub() {
