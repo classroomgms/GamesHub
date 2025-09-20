@@ -277,10 +277,7 @@
     }
 
 function openGame(game) {
-  gameFrame.src = game.url; // just the relative path
-  gameFrame.style.display = "none";
-  iframeOverlay.style.display = "flex";
-  loadingOverlay.style.display = "none";
+  // Show game screen and overlay
   gameScreen.style.display = "flex";
   mainMenu.style.display = "none";
   backButton.style.display = "block";
@@ -302,20 +299,30 @@ function openGame(game) {
   mainHeader.appendChild(icon);
   mainHeader.appendChild(title);
 
-  // Play overlay click
+  // Set overlay to play button
+  iframeOverlay.style.background = `url('${game.thumbnail}') center/cover no-repeat`;
+  iframeOverlay.style.display = "flex";
+
+  // Prepare iframe but don't load yet
+  gameFrame.src = "";
+  gameFrame.style.display = "block";
+  gameFrame.style.background = `url('${game.thumbnail}') center/cover no-repeat`;
+  loadingOverlay.style.display = "none";
+
+  // Click to play
   iframeOverlay.onclick = () => {
     iframeOverlay.style.display = "none";
     loadingOverlay.style.display = "flex";
-    gameFrame.src = game.url; // relative path works
+
+    // Load the game iframe now
+    gameFrame.src = game.url;
     gameFrame.onload = () => {
+      // Remove thumbnail background once loaded
+      gameFrame.style.background = "none";
       loadingOverlay.style.display = "none";
-      gameFrame.style.display = "block";
     };
   };
-
-  // Set overlay background to game thumbnail
-  iframeOverlay.style.background = `url('${game.thumbnail}') center/cover no-repeat`;
-};
+}
 
 
 
