@@ -277,7 +277,7 @@
     }
 
 function openGame(game) {
-  // Show game screen and overlay
+  // Show game screen
   gameScreen.style.display = "flex";
   mainMenu.style.display = "none";
   backButton.style.display = "block";
@@ -299,14 +299,32 @@ function openGame(game) {
   mainHeader.appendChild(icon);
   mainHeader.appendChild(title);
 
-  // Set overlay to play button
-  iframeOverlay.style.background = `url('${game.thumbnail}') center/cover no-repeat`;
+  // Set overlay background to thumbnail with a dark filter
+  iframeOverlay.style.background = `
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('${game.thumbnail}') center/cover no-repeat
+  `;
   iframeOverlay.style.display = "flex";
+
+  // Ensure the overlay covers the iframe completely
+  iframeOverlay.style.position = "absolute";
+  iframeOverlay.style.top = 0;
+  iframeOverlay.style.left = 0;
+  iframeOverlay.style.right = 0;
+  iframeOverlay.style.bottom = 0;
+  iframeOverlay.style.justifyContent = "center";
+  iframeOverlay.style.alignItems = "center";
+  iframeOverlay.style.zIndex = 5;
+  iframeOverlay.style.color = "white";
+  iframeOverlay.style.fontSize = "18px";
+  iframeOverlay.style.fontWeight = "bold";
+  iframeOverlay.style.borderRadius = "12px";
+  iframeOverlay.style.cursor = "pointer";
 
   // Prepare iframe but don't load yet
   gameFrame.src = "";
   gameFrame.style.display = "block";
-  gameFrame.style.background = `url('${game.thumbnail}') center/cover no-repeat`;
+  gameFrame.style.background = `none`;
   loadingOverlay.style.display = "none";
 
   // Click to play
@@ -317,13 +335,10 @@ function openGame(game) {
     // Load the game iframe now
     gameFrame.src = game.url;
     gameFrame.onload = () => {
-      // Remove thumbnail background once loaded
-      gameFrame.style.background = "none";
       loadingOverlay.style.display = "none";
     };
   };
 }
-
 
 
     function backToHub() {
