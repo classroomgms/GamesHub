@@ -141,6 +141,35 @@
       z-index: 5;
     }
 
+    /* Loading overlay */
+    .loading-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      z-index: 10;
+    }
+
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #2c7be5;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Fullscreen Button floating on game */
     .fullscreen-btn {
       position: absolute;
@@ -192,6 +221,10 @@
   <div id="gameScreen" class="game-screen">
     <div class="game-container">
       <div id="iframeOverlay" class="overlay">▶ Play</div>
+      <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        Loading Please Wait...
+      </div>
       <iframe id="gameFrame"></iframe>
       <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
     </div>
@@ -206,72 +239,53 @@
     const placeholderIcon = "assets/holder-icon.png";
     const placeholderThumb = "assets/holder-thumb.png";
 
-    const games = [
-      { key: "sprunki", title: "Incredibox - Sprunki", icon: "assets/sprunki-icon.png", thumbnail: "assets/sprunki-thumb.png", url: "games/Incredibox-Sprunki/index.html" },
-      { key: "fnf", title: "Friday Night Funkin", icon: "assets/fnf-icon.png", thumbnail: "assets/fnf-thumb.png", url: "games/funkin-html5/index.html" },
-      { key: "ssb", title: "Solar Sandbox", icon: "assets/ssb-icon.png", thumbnail: "assets/ssb-thumb.png", url: "https://html.itch.zone/html/14963170/HTML/index.html" },
-      { key: "wbwwb", title: "We Become What We Behold", icon: "assets/wbwwb-icon.png", thumbnail: "assets/wbwwb-thumb.png", url: "https://only-games.github.io/projects/wbwwb/index.html" },
-      { key: "polytrack", title: "PolyTrack", icon: "assets/polytrack-icon.png", thumbnail: "assets/polytrack-thumb.png", url: "https://polytrack-online.github.io/file/" },
-      { key: "adofai", title: "A Dance of Fire and Ice", icon: "assets/adofai-icon.png", thumbnail: "assets/adofai-thumb.png", url: "https://htmlxm.github.io/h8/a-dance-of-fire-and-ice/" },
-      { key: "mc", title: "Minecraft", icon: "assets/mc-icon.png", thumbnail: "assets/mc-thumb.png", url: "games/minecraft/eaglercraft-188.html" },
-      { key: "monkeymart", title: "Monkey Mart", icon: "assets/monkeymart-icon.png", thumbnail: "assets/monkeymart-thumb.png", url: "https://storeg223.github.io/g77/class-829" },
-      { key: "geodash", title: "Geometry Dash", icon: "assets/geodash-icon.png", thumbnail: "assets/geodash-thumb.png", url: "https://geometrydashonline.github.io/" },
-      { key: "cookie", title: "Cookie Clicker", icon: "assets/cookie-icon.png", thumbnail: "assets/cookie-thumb.png", url: "https://actedu15.github.io/g5/class-448" },
-      { key: "agario", title: "Agar.io", icon: "assets/agario-icon.png", thumbnail: "assets/agario-thumb.png", url: "https://one.sigmally.com/" },
-      { key: "leveldevil", title: "Level Devil", icon: "assets/leveldevil-icon.png", thumbnail: "assets/leveldevil-thumb.png", url: "https://bitlifeonline.github.io/level-devil/" },
-      { key: "tetris", title: "Tetris", icon: "assets/tetris-icon.png", thumbnail: "assets/tetris-thumb.png", url: "games/tetris/index.html" },
-      { key: "ovo", title: "OvO", icon: "assets/ovo-icon.png", thumbnail: "assets/ovo-thumb.png", url: "https://ovo-game.github.io/o/ovo" },
-      { key: "AmongUs", title: "Among Us", icon: "assets/amongus-icon.png", thumbnail: "assets/amongus-thumb.png", url: "https://ovo-game.github.io/o/among-us/" },
-      { key: "PapaPizza", title: "Papa's Pizzaria", icon: "assets/PapaPizza-icon.png", thumbnail: "assets/PapaPizza-thumb.png", url: "games/papalouie/papas-pizzeria/index.html" },
-      { key: "PapaFreez", title: "Papa's Freezeria", icon: "assets/PapaFreez-icon.png", thumbnail: "assets/PapaFreez-thumb.png", url: "games/papalouie/papas-freezeria/index.html" },
-      { key: "PapaSushi", title: "Papa's Sushiria", icon: "assets/PapaSushi-icon.png", thumbnail: "assets/PapaSushi-thumb.png", url: "games/papalouie/papas-sushiria/index.html" },
-      { key: "PapaPasta", title: "Papa's Pastaria", icon: "assets/PapaPasta-icon.png", thumbnail: "assets/PapaPasta-thumb.png", url: "games/papalouie/papas-pastaria/index.html" },
-      { key: "PapaBurger", title: "Papa's Burgeria", icon: "assets/PapaBurger-icon.png", thumbnail: "assets/PapaBurger-thumb.png", url: "games/papalouie/papas-burgeria/index.html" },
-      { key: "PapaTaco", title: "Papa's Taco Mia!", icon: "assets/PapaTaco-icon.png", thumbnail: "assets/PapaTaco-thumb.png", url: "games/papalouie/papas-taco-mia/index.html" },
-      { key: "PapaDonut", title: "Papa's Donuteria", icon: "assets/PapaDonut-icon.png", thumbnail: "assets/PapaDonut-thumb.png", url: "games/papalouie/papas-donuteria/index.html" },
-      { key: "PapaCup", title: "Papa's Cupcakeria", icon: "assets/PapaCup-icon.png", thumbnail: "assets/PapaCup-thumb.png", url: "games/papalouie/papas-cupcakeria/index.html" },
-      { key: "PapaWinger", title: "Papa's Wingeria", icon: "assets/PapaWingeria-icon.png", thumbnail: "assets/PapaWingeria-thumb.png", url: "games/papalouie/papas-wingeria/index.html" },
-      { key: "PapaCheese", title: "Papa's Cheeseria", icon: "assets/PapaCheeseria-icon.png", thumbnail: "assets/PapaCheeseria-thumb.png", url: "games/papalouie/papas-cheeseria/index.html" },
-      { key: "PapaHotDog", title: "Papa's Hot Doggeria", icon: "assets/PapaHotDog-icon.png", thumbnail: "assets/PapaHotDog-thumb.png", url: "games/papalouie/papas-hot-doggeria/index.html" },
-      { key: "PapaPan", title: "Papa's Pancakeria", icon: "assets/PapaPan-icon.png", thumbnail: "assets/PapaPan-thumb.png", url: "games/papalouie/papas-pancakeria/index.html" },
-      { key: "PapaScoop", title: "Papa's Scooperia", icon: "assets/PapaScoop-icon.png", thumbnail: "assets/PapaScoop-thumb.png", url: "games/papalouie/papas-scooperia/index.html" },
-      { key: "papa-louie-1", title: "Papa Louie: When Pizzas Attack!", icon: "assets/papalouie1-icon.png", thumbnail: "assets/papalouie1-thumb.png", url: "games/papalouie/papa-louie-1/index.html" },
-      { key: "papa-louie-2", title: "Papa Louie: When Burgers Attack!", icon: "assets/papalouie2-icon.png", thumbnail: "assets/papalouie2-thumb.png", url: "games/papalouie/papa-louie-2/index.html" },
-      { key: "papa-louie-3", title: "Papa Louie: When Sundaes Attack!", icon: "assets/papalouie3-icon.png", thumbnail: "assets/papalouie3-thumb.png", url: "games/papalouie/papa-louie-3/index.html" }
-    ];
-
     const mainMenu = document.getElementById("mainMenu");
     const gameScreen = document.getElementById("gameScreen");
     const gameFrame = document.getElementById("gameFrame");
     const iframeOverlay = document.getElementById("iframeOverlay");
+    const loadingOverlay = document.getElementById("loadingOverlay");
     const mainHeader = document.getElementById("mainHeader");
     const backButton = document.getElementById("backButton");
     const mainFooter = document.getElementById("mainFooter");
     const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-    games.forEach(game => {
-      const card = document.createElement("div");
-      card.className = "game-card";
-      card.innerHTML = `
-        <img class="game-thumbnail" src="${game.thumbnail || placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
-        <div class="game-info">
-          <img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
-          <h3>${game.title}</h3>
-        </div>
-      `;
-      card.addEventListener("click", () => openGame(game));
-      mainMenu.appendChild(card);
-    });
+    // 🔗 Fetch games.json from another repo
+    fetch("https://raw.githubusercontent.com/POWBoy1/GameHubUpdater/refs/heads/main/games.json")
+      .then(res => res.json())
+      .then(games => {
+        renderGames(games);
+      })
+      .catch(err => {
+        console.error("Failed to load games.json:", err);
+        mainMenu.innerHTML = "<p style='color:red'>Failed to load game list.</p>";
+      });
+
+    function renderGames(games) {
+      games.forEach(game => {
+        const card = document.createElement("div");
+        card.className = "game-card";
+        card.innerHTML = `
+          <img class="game-thumbnail" src="${game.thumbnail || placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
+          <div class="game-info">
+            <img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
+            <h3>${game.title}</h3>
+          </div>
+        `;
+        card.addEventListener("click", () => openGame(game));
+        mainMenu.appendChild(card);
+      });
+    }
 
     function openGame(game) {
-      gameFrame.src = game.url;
+      gameFrame.src = "";
       gameFrame.style.display = "none";
       iframeOverlay.style.display = "flex";
+      loadingOverlay.style.display = "none";
       gameScreen.style.display = "flex";
       mainMenu.style.display = "none";
       backButton.style.display = "block";
 
-      // Update header: keep back button, add game icon + title
+      // Update header
       mainHeader.innerHTML = '';
       mainHeader.appendChild(backButton);
 
@@ -287,12 +301,18 @@
 
       mainHeader.appendChild(icon);
       mainHeader.appendChild(title);
-    }
 
-    iframeOverlay.addEventListener("click", () => {
-      iframeOverlay.style.display = "none";
-      gameFrame.style.display = "block";
-    });
+      // Play overlay click
+      iframeOverlay.onclick = () => {
+        iframeOverlay.style.display = "none";
+        loadingOverlay.style.display = "flex";
+        gameFrame.src = game.url;
+        gameFrame.onload = () => {
+          loadingOverlay.style.display = "none";
+          gameFrame.style.display = "block";
+        };
+      };
+    }
 
     function backToHub() {
       gameScreen.style.display = "none";
@@ -300,6 +320,7 @@
       gameFrame.src = "";
       gameFrame.style.display = "none";
       iframeOverlay.style.display = "none";
+      loadingOverlay.style.display = "none";
       backButton.style.display = "none";
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       if (document.fullscreenElement) document.exitFullscreen();
@@ -315,13 +336,11 @@
 
     document.addEventListener("fullscreenchange", () => {
       if (document.fullscreenElement === gameFrame) {
-        // Hide UI
         mainHeader.classList.add("hidden");
         mainFooter.classList.add("hidden");
         backButton.classList.add("hidden");
         fullscreenBtn.textContent = "❌ Exit Fullscreen";
       } else {
-        // Restore UI
         mainHeader.classList.remove("hidden");
         mainFooter.classList.remove("hidden");
         backButton.classList.remove("hidden");
