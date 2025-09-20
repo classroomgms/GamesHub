@@ -58,7 +58,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      padding: 100px 20px 80px; /* room for header + footer */
+      padding: 100px 20px 80px;
       flex: 1;
     }
 
@@ -102,8 +102,8 @@
       justify-content: center;
       align-items: center;
       background: white;
-      padding-top: 80px; /* avoid header overlap */
-      padding-bottom: 60px; /* avoid footer overlap */
+      padding-top: 80px;
+      padding-bottom: 60px;
     }
 
     .game-container {
@@ -117,6 +117,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     iframe {
@@ -129,16 +130,21 @@
 
     .overlay {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.7);
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.4);
       color: white;
-      padding: 20px 40px;
-      border-radius: 10px;
-      font-size: 18px;
+      font-size: 24px;
+      font-weight: bold;
       cursor: pointer;
+      border-radius: 12px;
       z-index: 5;
+      text-shadow: 1px 1px 4px black;
     }
 
     /* Loading overlay */
@@ -185,7 +191,6 @@
       font-weight: bold;
     }
 
-    /* Footer */
     footer {
       background: #2c7be5;
       color: white;
@@ -200,7 +205,6 @@
       transition: opacity 0.3s ease;
     }
 
-    /* Hidden state for fullscreen */
     .hidden {
       opacity: 0;
       pointer-events: none;
@@ -208,76 +212,67 @@
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header id="mainHeader">
-    <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
-    🎮 POWBoy1’s Game Hub 🎮
-  </header>
+<header id="mainHeader">
+  <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
+  🎮 POWBoy1’s Game Hub 🎮
+</header>
 
-  <!-- Main Menu -->
-  <div id="mainMenu" class="games-grid"></div>
+<div id="mainMenu" class="games-grid"></div>
 
-  <!-- Game Screen -->
-  <div id="gameScreen" class="game-screen">
-    <div class="game-container">
-      <div id="iframeOverlay" class="overlay">▶ Play</div>
-      <div id="loadingOverlay" class="loading-overlay">
-        <div class="spinner"></div>
-        Loading Please Wait...
-      </div>
-      <iframe id="gameFrame"></iframe>
-      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
+<div id="gameScreen" class="game-screen">
+  <div class="game-container">
+    <div id="iframeOverlay" class="overlay">▶ Play</div>
+    <div id="loadingOverlay" class="loading-overlay">
+      <div class="spinner"></div>
+      Loading Please Wait...
     </div>
+    <iframe id="gameFrame"></iframe>
+    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
+</div>
 
-  <!-- Footer -->
-  <footer id="mainFooter">
-    Made by POWBoy1
-  </footer>
+<footer id="mainFooter">Made by POWBoy1</footer>
 
-  <script>
-    const placeholderIcon = "assets/holder-icon.png";
-    const placeholderThumb = "assets/holder-thumb.png";
+<script>
+const placeholderIcon = "assets/holder-icon.png";
+const placeholderThumb = "assets/holder-thumb.png";
 
-    const mainMenu = document.getElementById("mainMenu");
-    const gameScreen = document.getElementById("gameScreen");
-    const gameFrame = document.getElementById("gameFrame");
-    const iframeOverlay = document.getElementById("iframeOverlay");
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    const mainHeader = document.getElementById("mainHeader");
-    const backButton = document.getElementById("backButton");
-    const mainFooter = document.getElementById("mainFooter");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
+const mainMenu = document.getElementById("mainMenu");
+const gameScreen = document.getElementById("gameScreen");
+const gameFrame = document.getElementById("gameFrame");
+const iframeOverlay = document.getElementById("iframeOverlay");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const mainHeader = document.getElementById("mainHeader");
+const backButton = document.getElementById("backButton");
+const mainFooter = document.getElementById("mainFooter");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
 
-    // 🔗 Fetch games.json from another repo
-    fetch("https://raw.githubusercontent.com/POWBoy1/GameHubUpdater/refs/heads/main/games.json")
-      .then(res => res.json())
-      .then(games => {
-        renderGames(games);
-      })
-      .catch(err => {
-        console.error("Failed to load games.json:", err);
-        mainMenu.innerHTML = "<p style='color:red'>Failed to load game list.</p>";
-      });
+// 🔗 Fetch games.json
+fetch("https://raw.githubusercontent.com/POWBoy1/GameHubUpdater/refs/heads/main/games.json")
+  .then(res => res.json())
+  .then(games => renderGames(games))
+  .catch(err => {
+    console.error("Failed to load games.json:", err);
+    mainMenu.innerHTML = "<p style='color:red'>Failed to load game list.</p>";
+  });
 
-    function renderGames(games) {
-      games.forEach(game => {
-        const card = document.createElement("div");
-        card.className = "game-card";
-        card.innerHTML = `
-          <img class="game-thumbnail" src="${game.thumbnail || placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
-          <div class="game-info">
-            <img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
-            <h3>${game.title}</h3>
-          </div>
-        `;
-        card.addEventListener("click", () => openGame(game));
-        mainMenu.appendChild(card);
-      });
-    }
+function renderGames(games) {
+  games.forEach(game => {
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.innerHTML = `
+      <img class="game-thumbnail" src="${game.thumbnail || placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
+      <div class="game-info">
+        <img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
+        <h3>${game.title}</h3>
+      </div>
+    `;
+    card.addEventListener("click", () => openGame(game));
+    mainMenu.appendChild(card);
+  });
+}
 
 function openGame(game) {
-  // Show game screen
   gameScreen.style.display = "flex";
   mainMenu.style.display = "none";
   backButton.style.display = "block";
@@ -299,38 +294,23 @@ function openGame(game) {
   mainHeader.appendChild(icon);
   mainHeader.appendChild(title);
 
-  // Set overlay background inside the game-container
+  // Overlay background
   iframeOverlay.style.background = `
     linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
     url('${game.thumbnail}') center/cover no-repeat
   `;
   iframeOverlay.style.display = "flex";
-  iframeOverlay.style.position = "absolute";
-  iframeOverlay.style.top = 0;
-  iframeOverlay.style.left = 0;
-  iframeOverlay.style.width = "100%";
-  iframeOverlay.style.height = "100%";
-  iframeOverlay.style.justifyContent = "center";
-  iframeOverlay.style.alignItems = "center";
-  iframeOverlay.style.borderRadius = "12px";
-  iframeOverlay.style.cursor = "pointer";
-  iframeOverlay.style.zIndex = 5;
-  iframeOverlay.style.color = "white";
-  iframeOverlay.style.fontSize = "18px";
-  iframeOverlay.style.fontWeight = "bold";
+  iframeOverlay.textContent = "▶ Play";
 
-  // Prepare iframe but don't load yet
+  // Prepare iframe but don't load
   gameFrame.src = "";
   gameFrame.style.display = "block";
-  gameFrame.style.background = "none";
   loadingOverlay.style.display = "none";
 
   // Click to play
   iframeOverlay.onclick = () => {
     iframeOverlay.style.display = "none";
     loadingOverlay.style.display = "flex";
-
-    // Load the game iframe now
     gameFrame.src = game.url;
     gameFrame.onload = () => {
       loadingOverlay.style.display = "none";
@@ -338,40 +318,39 @@ function openGame(game) {
   };
 }
 
+function backToHub() {
+  gameScreen.style.display = "none";
+  mainMenu.style.display = "grid";
+  gameFrame.src = "";
+  gameFrame.style.display = "none";
+  iframeOverlay.style.display = "none";
+  loadingOverlay.style.display = "none";
+  backButton.style.display = "none";
+  mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
+  if (document.fullscreenElement) document.exitFullscreen();
+}
 
-    function backToHub() {
-      gameScreen.style.display = "none";
-      mainMenu.style.display = "grid";
-      gameFrame.src = "";
-      gameFrame.style.display = "none";
-      iframeOverlay.style.display = "none";
-      loadingOverlay.style.display = "none";
-      backButton.style.display = "none";
-      mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
-      if (document.fullscreenElement) document.exitFullscreen();
-    }
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    gameFrame.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
 
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        gameFrame.requestFullscreen();
-      } else {
-        document.exitFullscreen();
-      }
-    }
-
-    document.addEventListener("fullscreenchange", () => {
-      if (document.fullscreenElement === gameFrame) {
-        mainHeader.classList.add("hidden");
-        mainFooter.classList.add("hidden");
-        backButton.classList.add("hidden");
-        fullscreenBtn.textContent = "❌ Exit Fullscreen";
-      } else {
-        mainHeader.classList.remove("hidden");
-        mainFooter.classList.remove("hidden");
-        backButton.classList.remove("hidden");
-        fullscreenBtn.textContent = "⛶ Fullscreen";
-      }
-    });
-  </script>
+document.addEventListener("fullscreenchange", () => {
+  if (document.fullscreenElement === gameFrame) {
+    mainHeader.classList.add("hidden");
+    mainFooter.classList.add("hidden");
+    backButton.classList.add("hidden");
+    fullscreenBtn.textContent = "❌ Exit Fullscreen";
+  } else {
+    mainHeader.classList.remove("hidden");
+    mainFooter.classList.remove("hidden");
+    backButton.classList.remove("hidden");
+    fullscreenBtn.textContent = "⛶ Fullscreen";
+  }
+});
+</script>
 </body>
 </html>
