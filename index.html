@@ -303,14 +303,9 @@ function openGame(game) {
   mainHeader.appendChild(icon);
   mainHeader.appendChild(title);
 
-  // Set overlay background to thumbnail
-  iframeOverlay.style.background = `url('${game.thumbnail || placeholderThumb}') center/cover no-repeat`;
-  iframeOverlay.style.color = 'white';
-  iframeOverlay.style.fontWeight = 'bold';
-  iframeOverlay.textContent = '▶ Play';
-  iframeOverlay.style.justifyContent = 'center';
-  iframeOverlay.style.alignItems = 'center';
-  iframeOverlay.style.display = 'flex';
+  // Set iframe background to the game's thumbnail
+  gameFrame.style.background = `url('${game.thumbnail || placeholderThumb}') center/cover no-repeat`;
+  gameFrame.style.borderRadius = '12px';
 
   // Play overlay click
   iframeOverlay.onclick = () => {
@@ -323,6 +318,8 @@ function openGame(game) {
     gameFrame.onload = () => {
       loadingOverlay.style.display = "none";
       gameFrame.style.display = "block";
+      // Remove background once the game loads
+      gameFrame.style.background = "none";
     };
   };
 }
