@@ -8,10 +8,9 @@ This project disguises the browser tab as **Google Classroom**, including both t
 - Google Classroom style **icon**
 - Easy to use, just open and play
 - Updated Frequently!
-- Open Source! So you can create your own Games Hub!
 
 ## Notes
-- This project use a lot of different website for the games, So some of them might not work/Blocked.
 - some games might not work, if it's blocked then I'll figure out a way.
+
 ## Disclaimer
 This project is for educational purposes only. Use responsibly.
