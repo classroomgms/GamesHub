@@ -97,7 +97,7 @@
       display: none;
       flex: 1;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       background: white;
       padding-top: 80px;
@@ -116,6 +116,7 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+      margin-bottom: 20px; /* space for fullscreen button */
     }
 
     iframe {
@@ -170,11 +171,11 @@
 
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    /* Fullscreen button floating outside game screen */
+    /* Fullscreen button below game container */
     .fullscreen-btn {
-      position: fixed;
-      bottom: 80px;   /* above the footer */
-      right: 20px;
+      position: absolute;         /* relative to gameScreen */
+      top: calc(80px + 100%);     /* below game container */
+      right: 10px;
       background: #2c7be5;
       color: white;
       padding: 8px 14px;
@@ -183,8 +184,8 @@
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
+      display: none;
       z-index: 2000;
-      display: none;  /* hidden by default */
     }
 
     footer {
@@ -257,10 +258,10 @@
       </div>
       <iframe id="gameFrame"></iframe>
     </div>
-  </div>
 
-  <!-- Fullscreen button floating outside game screen -->
-  <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
+    <!-- Fullscreen button below container -->
+    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
+  </div>
 
   <footer id="mainFooter">Made by POWBoy1</footer>
 
@@ -328,7 +329,7 @@
       mainMenu.style.display = "none";
       backButton.style.display = "block";
       helpButton.style.display = "block";
-      fullscreenBtn.style.display = "block"; // show button
+      fullscreenBtn.style.display = "block";
 
       mainHeader.innerHTML = "";
       mainHeader.appendChild(backButton);
@@ -370,7 +371,7 @@
       iframeOverlay.style.display = "none";
       loadingOverlay.style.display = "none";
       backButton.style.display = "none";
-      fullscreenBtn.style.display = "none"; // hide button
+      fullscreenBtn.style.display = "none";
 
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       mainHeader.appendChild(helpButton);
