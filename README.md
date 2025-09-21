@@ -11,6 +11,11 @@ This project disguises the browser tab as **Google Classroom**, including both t
 
 ## Notes
 - some games might not work, if it's Blocked/Broken/Buggy I'll change the Provider.
+- Some of the Updates were used with AI
 
 ## Disclaimer
 This project is for educational purposes only. Use responsibly.
+
+## Credits
+- POWBoy1
+- Chatgpt 5/mini
