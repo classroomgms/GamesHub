@@ -37,6 +37,7 @@
       margin-right: 8px;
     }
 
+    /* Buttons */
     .back-button {
       position: fixed;
       top: 12px;
@@ -44,7 +45,7 @@
       background: red;
       border: none;
       padding: 6px 12px;
-      border-radius: 6px;
+      border-radius: 12px; /* updated */
       cursor: pointer;
       color: white;
       font-weight: bold;
@@ -56,7 +57,7 @@
       background: #ffc107;
       border: none;
       padding: 6px 12px;
-      border-radius: 6px;
+      border-radius: 12px; /* updated */
       cursor: pointer;
       font-weight: bold;
       color: black;
@@ -184,16 +185,18 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
     .fullscreen-btn {
-      margin-top: 12px;
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
       background: #2c7be5;
       color: white;
       padding: 8px 14px;
-      border-radius: 6px;
+      border-radius: 12px;  /* updated */
       border: none;
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
-      align-self: flex-start;
+      z-index: 20;
     }
 
     footer {
@@ -241,7 +244,7 @@
       background: red;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 12px; /* updated */
       padding: 6px 10px;
       cursor: pointer;
       font-weight: bold;
@@ -265,9 +268,9 @@
         Loading Please Wait...
       </div>
       <iframe id="gameFrame"></iframe>
+      <!-- Fullscreen button now bottom-right inside container -->
+      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
     </div>
-    <!-- Fullscreen button directly below container -->
-    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
 
   <footer id="mainFooter">Made by POWBoy1</footer>
@@ -337,7 +340,6 @@
       backButton.style.display = "block";
       helpButton.style.display = "block";
 
-      // Reset header
       mainHeader.innerHTML = "";
       mainHeader.appendChild(backButton);
 
@@ -352,7 +354,6 @@
 
       mainHeader.appendChild(helpButton);
 
-      // Overlay background
       iframeOverlay.style.background = `
         linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
         url('${game.thumbnail || placeholderThumb}') center/cover no-repeat
