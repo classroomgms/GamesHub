@@ -32,10 +32,7 @@
       transition: opacity 0.3s ease;
     }
 
-    header img {
-      height: 24px;
-      margin-right: 8px;
-    }
+    header img { height: 24px; margin-right: 8px; }
 
     /* Buttons */
     .back-button {
@@ -45,7 +42,7 @@
       background: red;
       border: none;
       padding: 6px 12px;
-      border-radius: 12px; 
+      border-radius: 12px;
       cursor: pointer;
       color: white;
       font-weight: bold;
@@ -57,12 +54,12 @@
       background: #ffc107;
       border: none;
       padding: 6px 12px;
-      border-radius: 12px; 
+      border-radius: 12px;
       cursor: pointer;
       font-weight: bold;
       color: black;
       position: absolute;
-      right: 40px;  /* fixed syntax */
+      right: 40px;  
       top: 12px;
       z-index: 1001;
     }
@@ -89,23 +86,11 @@
 
     .game-card:hover { transform: scale(1.05); }
 
-    .game-thumbnail {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-    }
+    .game-thumbnail { width: 100%; height: 150px; object-fit: cover; }
 
-    .game-info {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-    }
+    .game-info { display: flex; align-items: center; padding: 10px; }
 
-    .game-info img {
-      width: 24px;
-      height: 24px;
-      margin-right: 10px;
-    }
+    .game-info img { width: 24px; height: 24px; margin-right: 10px; }
 
     /* Game Screen */
     .game-screen {
@@ -185,19 +170,21 @@
 
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
+    /* Fullscreen button floating outside game screen */
     .fullscreen-btn {
-      position: fixed;  /* moved outside container */
-      bottom: 20px;
+      position: fixed;
+      bottom: 80px;   /* above the footer */
       right: 20px;
       background: #2c7be5;
       color: white;
       padding: 8px 14px;
-      border-radius: 12px;  
+      border-radius: 12px;
       border: none;
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
-      z-index: 2000; 
+      z-index: 2000;
+      display: none;  /* hidden by default */
     }
 
     footer {
@@ -270,9 +257,10 @@
       </div>
       <iframe id="gameFrame"></iframe>
     </div>
-    <!-- Fullscreen button now outside container -->
-    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
+
+  <!-- Fullscreen button floating outside game screen -->
+  <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
 
   <footer id="mainFooter">Made by POWBoy1</footer>
 
@@ -312,7 +300,7 @@
     closeHelp.onclick = () => helpModal.style.display = "none";
     helpModal.onclick = e => { if(e.target === helpModal) helpModal.style.display = "none"; };
 
-    // Load games.json
+    // Load games
     fetch("https://raw.githubusercontent.com/POWBoy1/GameHubUpdater/refs/heads/main/games.json")
       .then(res => res.json())
       .then(renderGames)
@@ -340,6 +328,7 @@
       mainMenu.style.display = "none";
       backButton.style.display = "block";
       helpButton.style.display = "block";
+      fullscreenBtn.style.display = "block"; // show button
 
       mainHeader.innerHTML = "";
       mainHeader.appendChild(backButton);
@@ -381,10 +370,10 @@
       iframeOverlay.style.display = "none";
       loadingOverlay.style.display = "none";
       backButton.style.display = "none";
+      fullscreenBtn.style.display = "none"; // hide button
 
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       mainHeader.appendChild(helpButton);
-      helpButton.style.display = "block";
 
       if (document.fullscreenElement) document.exitFullscreen();
     }
