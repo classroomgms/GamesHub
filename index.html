@@ -78,23 +78,8 @@
     .game-thumbnail { width: 100%; height: 150px; object-fit: cover; }
     .game-info { display: flex; align-items: center; padding: 10px; }
     .game-info img { width: 24px; height: 24px; margin-right: 10px; }
-    .game-screen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      background: white;
-      padding-top: 80px;
-      padding-bottom: 60px;
-    }
-    .game-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 80%;
-      max-width: 1200px;
-      position: relative;
-    }
+    .game-screen { display: none; flex-direction: column; align-items: center; justify-content: flex-start; background: white; padding-top: 80px; padding-bottom: 60px; }
+    .game-wrapper { display: flex; flex-direction: column; align-items: flex-start; width: 80%; max-width: 1200px; position: relative; }
     .game-container {
       border: 12px solid #2c7be5;
       border-radius: 24px;
@@ -106,13 +91,7 @@
       overflow: hidden;
       position: relative;
     }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 12px;
-      display: none;
-    }
+    iframe { width: 100%; height: 100%; border: none; border-radius: 12px; display: none; }
     .overlay {
       position: absolute;
       inset: 0;
@@ -214,181 +193,162 @@
   </style>
 </head>
 <body>
-  <header id="mainHeader">
-    <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
-    🎮 POWBoy1’s Game Hub 🎮
-    <button id="helpButton">❓ Help</button>
-  </header>
+<header id="mainHeader">
+  <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
+  🎮 POWBoy1’s Game Hub 🎮
+  <button id="helpButton">❓ Help</button>
+</header>
 
-  <div id="mainMenu" class="games-grid"></div>
+<div id="mainMenu" class="games-grid"></div>
 
-  <div id="gameScreen" class="game-screen">
-    <div class="game-wrapper">
-      <div class="game-container">
-        <div id="iframeOverlay" class="overlay">▶ Play</div>
-        <div id="loadingOverlay" class="loading-overlay">
-          <div class="spinner"></div>
-          Loading Please Wait...
-        </div>
-        <iframe id="gameFrame"></iframe>
+<div id="gameScreen" class="game-screen">
+  <div class="game-wrapper">
+    <div class="game-container">
+      <div id="iframeOverlay" class="overlay">▶ Play</div>
+      <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        Loading Please Wait...
       </div>
-      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
+      <iframe id="gameFrame"></iframe>
     </div>
+    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
+</div>
 
-  <footer id="mainFooter">Made by POWBoy1</footer>
+<footer id="mainFooter">Made by POWBoy1</footer>
 
-  <div id="helpModal">
-    <div id="helpModalContent">
-      <h2>🎮 How to Use POWBoy1’s Game Hub</h2>
-      <ol>
-        <li><b>Browse Games:</b> Click any game card.</li>
-        <li><b>Play:</b> Press ▶ Play on the overlay.</li>
-        <li><b>Fullscreen:</b> Use ⛶ Fullscreen (exit with Escape/❌/Done).</li>
-        <li><b>Back:</b> Use ⬅ Back to return to the hub.</li>
-      </ol>
-      <button id="closeHelp">✖ Close</button>
-    </div>
+<div id="helpModal">
+  <div id="helpModalContent">
+    <h2>🎮 How to Use POWBoy1’s Game Hub</h2>
+    <ol>
+      <li><b>Browse Games:</b> Click any game card.</li>
+      <li><b>Play:</b> Press ▶ Play on the overlay.</li>
+      <li><b>Fullscreen:</b> Use ⛶ Fullscreen (exit with Escape/❌/Done).</li>
+      <li><b>Back:</b> Use ⬅ Back to return to the hub.</li>
+    </ol>
+    <button id="closeHelp">✖ Close</button>
   </div>
+</div>
 
-  <script>
-    const placeholderIcon = "assets/holder-icon.png";
-    const placeholderThumb = "assets/holder-thumb.png";
-    const mainMenu = document.getElementById("mainMenu");
-    const gameScreen = document.getElementById("gameScreen");
-    const gameFrame = document.getElementById("gameFrame");
-    const iframeOverlay = document.getElementById("iframeOverlay");
-    const loadingOverlay = document.getElementById("loadingOverlay");
-    const mainHeader = document.getElementById("mainHeader");
-    const backButton = document.getElementById("backButton");
-    const helpButton = document.getElementById("helpButton");
-    const mainFooter = document.getElementById("mainFooter");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    const helpModal = document.getElementById("helpModal");
-    const closeHelp = document.getElementById("closeHelp");
+<script>
+const placeholderIcon = "assets/holder-icon.png";
+const placeholderThumb = "assets/holder-thumb.png";
+const mainMenu = document.getElementById("mainMenu");
+const gameScreen = document.getElementById("gameScreen");
+const gameFrame = document.getElementById("gameFrame");
+const iframeOverlay = document.getElementById("iframeOverlay");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const mainHeader = document.getElementById("mainHeader");
+const backButton = document.getElementById("backButton");
+const helpButton = document.getElementById("helpButton");
+const mainFooter = document.getElementById("mainFooter");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const helpModal = document.getElementById("helpModal");
+const closeHelp = document.getElementById("closeHelp");
 
-    let gamesList = [];
+helpButton.onclick = () => helpModal.style.display = "flex";
+closeHelp.onclick = () => helpModal.style.display = "none";
+helpModal.onclick = e => { if(e.target===helpModal) helpModal.style.display="none"; };
 
-    helpButton.onclick = () => helpModal.style.display = "flex";
-    closeHelp.onclick = () => helpModal.style.display = "none";
-    helpModal.onclick = e => { if(e.target === helpModal) helpModal.style.display = "none"; };
+fetch("https://raw.githubusercontent.com/POWBoy1/GameHubUpdater/refs/heads/main/games.json")
+.then(res=>res.json())
+.then(renderGames)
+.catch(err=>{console.error(err); mainMenu.innerHTML="<p style='color:red'>Failed to load game list.</p>";});
 
-    fetch("https://raw.githubusercontent.com/POWBoy1/GameHubUpdater/refs/heads/main/games.json")
-      .then(res => res.json())
-      .then(games => { gamesList = games; renderGames(games); restoreLastGame(); })
-      .catch(err => { console.error(err); mainMenu.innerHTML = "<p style='color:red'>Failed to load game list.</p>"; });
+function renderGames(games){
+  mainMenu.innerHTML="";
+  games.forEach(game=>{
+    const card=document.createElement("div");
+    card.className="game-card";
+    card.innerHTML=`
+      <img class="game-thumbnail" src="${game.thumbnail||placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
+      <div class="game-info">
+        <img src="${game.icon||placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
+        <h3>${game.title}</h3>
+      </div>
+    `;
+    card.onclick=()=>openGame(game);
+    mainMenu.appendChild(card);
+  });
+}
 
-    function renderGames(games) {
-      mainMenu.innerHTML = "";
-      games.forEach(game => {
-        const card = document.createElement("div");
-        card.className = "game-card";
-        card.innerHTML = `
-          <img class="game-thumbnail" src="${game.thumbnail || placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
-          <div class="game-info">
-            <img src="${game.icon || placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
-            <h3>${game.title}</h3>
-          </div>
-        `;
-        card.onclick = () => openGame(game);
-        mainMenu.appendChild(card);
-      });
-    }
+function openGame(game){
+  gameScreen.style.display="flex";
+  mainMenu.style.display="none";
+  backButton.style.display="block";
+  helpButton.style.display="block";
 
-    function openGame(game) {
-      gameScreen.style.display = "flex";
-      mainMenu.style.display = "none";
-      backButton.style.display = "block";
-      helpButton.style.display = "block";
+  mainHeader.innerHTML="";
+  mainHeader.appendChild(backButton);
 
-      mainHeader.innerHTML = "";
-      mainHeader.appendChild(backButton);
-      const icon = document.createElement("img");
-      icon.src = game.icon || placeholderIcon;
-      icon.alt = game.title + " icon";
-      mainHeader.appendChild(icon);
-      const title = document.createElement("span");
-      title.textContent = game.title;
-      mainHeader.appendChild(title);
-      mainHeader.appendChild(helpButton);
+  const icon=document.createElement("img");
+  icon.src=game.icon||placeholderIcon;
+  icon.alt=game.title+" icon";
+  mainHeader.appendChild(icon);
 
-      iframeOverlay.style.background = `
-        linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
-        url('${game.thumbnail || placeholderThumb}') center/cover no-repeat
-      `;
+  const title=document.createElement("span");
+  title.textContent=game.title;
+  mainHeader.appendChild(title);
 
-      const savedSrc = localStorage.getItem("game_" + game.id);
-      if(savedSrc) {
-        gameFrame.src = savedSrc;
-        iframeOverlay.style.display = "none";
-        fullscreenBtn.style.display = "block";
-      } else {
-        gameFrame.src = "";
-        iframeOverlay.style.display = "flex";
-        fullscreenBtn.style.display = "none";
-      }
+  mainHeader.appendChild(helpButton);
 
-      gameFrame.style.display = "block";
-      loadingOverlay.style.display = "none";
+  iframeOverlay.style.background=`
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('${game.thumbnail||placeholderThumb}') center/cover no-repeat
+  `;
+  iframeOverlay.style.display="flex";
 
-      iframeOverlay.onclick = () => {
-        iframeOverlay.style.display = "none";
-        loadingOverlay.style.display = "flex";
-        gameFrame.src = game.url;
-        gameFrame.onload = () => {
-          loadingOverlay.style.display = "none";
-          fullscreenBtn.style.display = "block";
-          localStorage.setItem("game_" + game.id, game.url);
-          localStorage.setItem("lastPlayedGame", game.id);
-        };
-      };
-    }
+  gameFrame.style.display="block";
+  gameFrame.src="";
+  loadingOverlay.style.display="none";
+  fullscreenBtn.style.display="none";
 
-    function backToHub() {
-      gameScreen.style.display = "none";
-      mainMenu.style.display = "grid";
-      gameFrame.src = "";
-      gameFrame.style.display = "none";
-      iframeOverlay.style.display = "none";
-      loadingOverlay.style.display = "none";
-      backButton.style.display = "none";
-      fullscreenBtn.style.display = "none";
+  iframeOverlay.onclick=()=>{
+    iframeOverlay.style.display="none";
+    loadingOverlay.style.display="flex";
+    gameFrame.src=game.url;
+    localStorage.setItem("lastGame", game.url);
+    gameFrame.onload=()=>{
+      loadingOverlay.style.display="none";
+      fullscreenBtn.style.display="block";
+    };
+  };
+}
 
-      mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
-      mainHeader.appendChild(helpButton);
+function backToHub(){
+  gameScreen.style.display="none";
+  mainMenu.style.display="grid";
+  gameFrame.src="";
+  gameFrame.style.display="none";
+  iframeOverlay.style.display="none";
+  loadingOverlay.style.display="none";
+  backButton.style.display="none";
+  fullscreenBtn.style.display="none";
+  mainHeader.innerHTML="🎮 POWBoy1’s Game Hub 🎮";
+  mainHeader.appendChild(helpButton);
+  if(document.fullscreenElement) document.exitFullscreen();
+}
 
-      if (document.fullscreenElement) document.exitFullscreen();
-    }
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    if(gameFrame.requestFullscreen) gameFrame.requestFullscreen();
+    else if(gameFrame.webkitEnterFullscreen) gameFrame.webkitEnterFullscreen();
+  }else{
+    if(document.exitFullscreen) document.exitFullscreen();
+    else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
 
-    function toggleFullscreen() {
-      if (!document.fullscreenElement) {
-        if (gameFrame.requestFullscreen) gameFrame.requestFullscreen();
-        else if (gameFrame.webkitEnterFullscreen) gameFrame.webkitEnterFullscreen();
-      } else {
-        if (document.exitFullscreen) document.exitFullscreen();
-        else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-      }
-    }
-
-    document.addEventListener("fullscreenchange", () => {
-      const fs = document.fullscreenElement === gameFrame;
-      [mainHeader, mainFooter, backButton, helpButton].forEach(el => el.classList.toggle("hidden", fs));
-      fullscreenBtn.textContent = fs ? "❌ Exit Fullscreen" : "⛶ Fullscreen";
-    });
-
-    document.addEventListener("webkitfullscreenchange", () => {
-      const fs = document.webkitFullscreenElement === gameFrame;
-      [mainHeader, mainFooter, backButton, helpButton].forEach(el => el.classList.toggle("hidden", fs));
-      fullscreenBtn.textContent = fs ? "❌ Exit Fullscreen" : "⛶ Fullscreen";
-    });
-
-    function restoreLastGame() {
-      const lastGameId = localStorage.getItem("lastPlayedGame");
-      if(lastGameId && gamesList.length > 0) {
-        const game = gamesList.find(g => g.id == lastGameId);
-        if(game) openGame(game);
-      }
-    }
-  </script>
+document.addEventListener("fullscreenchange",()=>{
+  const fs=document.fullscreenElement===gameFrame;
+  [mainHeader, mainFooter, backButton, helpButton].forEach(el=>el.classList.toggle("hidden",fs));
+  fullscreenBtn.textContent=fs?"❌ Exit Fullscreen":"⛶ Fullscreen";
+});
+document.addEventListener("webkitfullscreenchange",()=>{
+  const fs=document.webkitFullscreenElement===gameFrame;
+  [mainHeader, mainFooter, backButton, helpButton].forEach(el=>el.classList.toggle("hidden",fs));
+  fullscreenBtn.textContent=fs?"❌ Exit Fullscreen":"⛶ Fullscreen";
+});
+</script>
 </body>
 </html>
