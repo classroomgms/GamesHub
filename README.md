@@ -10,7 +10,7 @@ This project disguises the browser tab as **Google Classroom**, including both t
 - Updated Frequently!
 
 ## Notes
-- some games might not work, if it's blocked then I'll figure out a way.
+- some games might not work, if it's Blocked/Broken/Buggy I'll change the Provider.
 
 ## Disclaimer
 This project is for educational purposes only. Use responsibly.
