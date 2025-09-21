@@ -53,7 +53,6 @@
     }
 
     #helpButton {
-      margin-left: 10px;
       background: #ffc107;
       border: none;
       padding: 6px 12px;
@@ -62,7 +61,7 @@
       font-weight: bold;
       color: black;
       position: absolute;
-      right: 10px;
+      right: 15px;
       top: 12px;
       z-index: 1001;
     }
@@ -129,7 +128,6 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
-      flex-direction: column;
     }
 
     iframe {
@@ -185,17 +183,18 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
     .fullscreen-btn {
-      margin-top: 10px;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
       background: #2c7be5;
       color: white;
-      padding: 10px 18px;
+      padding: 8px 14px;
       border-radius: 20px;
       border: none;
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
       z-index: 15;
-      display: none;
     }
 
     footer {
@@ -267,8 +266,8 @@
         Loading Please Wait...
       </div>
       <iframe id="gameFrame"></iframe>
+      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
     </div>
-    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
 
   <footer id="mainFooter">Made by POWBoy1</footer>
@@ -337,7 +336,6 @@
       mainMenu.style.display = "none";
       backButton.style.display = "block";
       helpButton.style.display = "block";
-      fullscreenBtn.style.display = "none"; // hidden until loaded
 
       // Reset header
       mainHeader.innerHTML = "";
@@ -369,10 +367,7 @@
         iframeOverlay.style.display = "none";
         loadingOverlay.style.display = "flex";
         gameFrame.src = game.url;
-        gameFrame.onload = () => {
-          loadingOverlay.style.display = "none";
-          fullscreenBtn.style.display = "inline-block"; // show when loaded
-        };
+        gameFrame.onload = () => loadingOverlay.style.display = "none";
       };
     }
 
@@ -384,7 +379,6 @@
       iframeOverlay.style.display = "none";
       loadingOverlay.style.display = "none";
       backButton.style.display = "none";
-      fullscreenBtn.style.display = "none";
 
       mainHeader.innerHTML = "🎮 POWBoy1’s Game Hub 🎮";
       mainHeader.appendChild(helpButton);
@@ -396,7 +390,7 @@
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
         if (gameFrame.requestFullscreen) gameFrame.requestFullscreen();
-        else if (gameFrame.webkitRequestFullscreen) gameFrame.webkitRequestFullscreen();
+        else if (gameFrame.webkitEnterFullscreen) gameFrame.webkitEnterFullscreen(); // iOS video element
       } else {
         if (document.exitFullscreen) document.exitFullscreen();
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
