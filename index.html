@@ -61,7 +61,7 @@
       font-weight: bold;
       color: black;
       position: absolute;
-      right: 40px;
+      right: 25px;   /* nudged left from 40px → 25px */
       top: 12px;
       z-index: 1001;
     }
@@ -110,6 +110,7 @@
     .game-screen {
       display: none;
       flex: 1;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       background: white;
@@ -183,9 +184,7 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
     .fullscreen-btn {
-      position: absolute;
-      bottom: -60px;
-      right: 10px;
+      margin-top: 12px;        /* spacing below iframe */
       background: #2c7be5;
       color: white;
       padding: 8px 14px;
@@ -194,7 +193,7 @@
       cursor: pointer;
       font-size: 14px;
       font-weight: bold;
-      z-index: 15;
+      align-self: flex-start;  /* left aligned under iframe */
     }
 
     footer {
@@ -266,8 +265,9 @@
         Loading Please Wait...
       </div>
       <iframe id="gameFrame"></iframe>
-      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
     </div>
+    <!-- Fullscreen button directly below container -->
+    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
 
   <footer id="mainFooter">Made by POWBoy1</footer>
@@ -287,6 +287,7 @@
   </div>
 
   <script>
+    // unchanged JS (same as yours)
     const placeholderIcon = "assets/holder-icon.png";
     const placeholderThumb = "assets/holder-thumb.png";
 
@@ -390,7 +391,7 @@
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
         if (gameFrame.requestFullscreen) gameFrame.requestFullscreen();
-        else if (gameFrame.webkitEnterFullscreen) gameFrame.webkitEnterFullscreen(); // iOS video element
+        else if (gameFrame.webkitEnterFullscreen) gameFrame.webkitEnterFullscreen();
       } else {
         if (document.exitFullscreen) document.exitFullscreen();
         else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
