@@ -13,267 +13,367 @@
       flex-direction: column;
       min-height: 100vh;
     }
-
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
       background: #2c7be5;
       color: white;
-      padding: 10px;
-      text-align: center;
-      font-size: 20px;
-    }
-
-    footer {
-      background: #f1f1f1;
-      color: #333;
-      padding: 10px;
-      text-align: center;
-      font-size: 14px;
-    }
-
-    main {
-      flex: 1;
+      padding: 15px;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      padding: 20px;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
     }
-
+    header img { height: 24px; margin-right: 8px; }
+    .back-button {
+      position: fixed;
+      top: 12px;
+      left: 10px;
+      background: red;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      font-weight: bold;
+      display: none;
+      z-index: 1001;
+    }
+    #helpButton {
+      background: #ffc107;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      color: black;
+      position: absolute;
+      right: 40px;
+      top: 12px;
+      z-index: 1001;
+    }
     .games-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      width: 100%;
-      max-width: 1000px;
+      padding: 100px 20px 80px;
+      flex: 1;
     }
-
     .game-card {
-      background: #f9f9f9;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background: white;
+      border-radius: 10px;
       overflow: hidden;
-      text-align: center;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      cursor: pointer;
       transition: transform 0.2s;
-      cursor: pointer;
-    }
-
-    .game-card:hover {
-      transform: scale(1.05);
-    }
-
-    .game-card img {
-      width: 100%;
-      height: 140px;
-      object-fit: cover;
-    }
-
-    .game-card h3 {
-      margin: 10px 0;
-      font-size: 16px;
-    }
-
-    .game-container {
-      width: 90%;
-      max-width: 900px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .game-container iframe {
-      width: 100%;
-      height: 60vh; /* shrunk so everything fits */
-      border: none;
-      border-radius: 12px;
-    }
-
-    .game-controls {
       display: flex;
-      gap: 10px;
+      flex-direction: column;
     }
-
-    .game-controls button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .back-btn {
-      background: #2c7be5;
-      color: white;
-    }
-
-    .help-btn {
-      background: #f1f1f1;
-    }
-
-    .fullscreen-btn {
-      background: #2c7be5;
-      color: white;
-    }
-
-    /* Overlay for messages */
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
+    .game-card:hover { transform: scale(1.05); }
+    .game-thumbnail { width: 100%; height: 150px; object-fit: cover; }
+    .game-info { display: flex; align-items: center; padding: 10px; }
+    .game-info img { width: 24px; height: 24px; margin-right: 10px; }
+    .game-screen { display: none; flex-direction: column; align-items: center; justify-content: flex-start; background: white; padding-top: 80px; padding-bottom: 60px; }
+    .game-wrapper { display: flex; flex-direction: column; align-items: flex-start; width: 80%; max-width: 1200px; position: relative; }
+    .game-container {
+      border: 12px solid #2c7be5;
+      border-radius: 24px;
+      width: 100%;
+      aspect-ratio: 16/9;
+      display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 2000;
+      overflow: hidden;
+      position: relative;
     }
-
-    .overlay-content {
+    iframe { width: 100%; height: 100%; border: none; border-radius: 12px; display: none; }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 12px;
+      cursor: pointer;
+      z-index: 5;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      background: rgba(0,0,0,0.4);
+      transition: background 0.3s ease;
+      text-shadow: 0 0 5px black;
+    }
+    .overlay:hover { background: rgba(0,0,0,0.6); }
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 18px;
+      z-index: 10;
+    }
+    .spinner {
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #2c7be5;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .fullscreen-btn {
+      margin-top: 5px;
+      align-self: flex-end;
+      transform: translateX(20px);
+      background: #2c7be5;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      display: none;
+    }
+    footer {
+      background: #2c7be5;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      font-weight: bold;
+      transition: opacity 0.3s ease;
+    }
+    .hidden { opacity: 0; pointer-events: none; }
+    #helpModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    #helpModalContent {
       background: white;
       padding: 20px;
       border-radius: 12px;
-      max-width: 500px;
-      text-align: center;
+      width: 90%;
+      max-width: 600px;
+      max-height: 80%;
+      overflow-y: auto;
+      position: relative;
     }
-
-    .close-overlay {
-      margin-top: 10px;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background: #2c7be5;
+    #helpModalContent button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: red;
       color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <header>🎮 Game Hub</header>
+<header id="mainHeader">
+  <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
+  🎮 POWBoy1’s Game Hub 🎮
+  <button id="helpButton">❓ Help</button>
+</header>
 
-  <main>
-    <div class="games-grid" id="gamesGrid"></div>
+<div id="mainMenu" class="games-grid"></div>
 
-    <div class="game-container" id="gameContainer">
-      <iframe id="gameFrame" src=""></iframe>
-      <div class="game-controls">
-        <button class="back-btn" id="backBtn">⬅ Back to Hub</button>
-        <button class="help-btn" id="helpBtn">❓ Help</button>
-        <button class="fullscreen-btn" id="fullscreenBtn">⛶ Fullscreen</button>
+<div id="gameScreen" class="game-screen">
+  <div class="game-wrapper">
+    <div class="game-container">
+      <div id="iframeOverlay" class="overlay">▶ Play</div>
+      <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        Loading Please Wait...
       </div>
+      <iframe id="gameFrame"></iframe>
     </div>
-  </main>
-
-  <footer>Made by POWBoy1</footer>
-
-  <!-- Help overlay -->
-  <div class="overlay" id="helpOverlay">
-    <div class="overlay-content">
-      <h2>Help</h2>
-      <p>If a game looks broken but your device supports WebGL, please visit <a href="https://get.webgl.org/" target="_blank">get.webgl.org</a>.</p>
-      <button class="close-overlay" id="closeHelp">Close</button>
-    </div>
+    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
+</div>
 
-  <script>
-    // ===== Device + WebGL Checks =====
-    function isAppleMobile() {
-      const ua = navigator.userAgent || navigator.vendor || window.opera;
-      return /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-    }
+<footer id="mainFooter">Made by POWBoy1</footer>
 
-    function supportsWebGL() {
-      try {
-        const canvas = document.createElement("canvas");
-        return !!(window.WebGLRenderingContext &&
-          (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
-      } catch (e) {
-        return false;
-      }
-    }
+<div id="helpModal">
+  <div id="helpModalContent">
+    <h2>🎮 How to Use POWBoy1’s Game Hub</h2>
+    <ol>
+      <li><b>Browse Games:</b> Click any game card.</li>
+      <li><b>Play:</b> Press ▶ Play on the overlay.</li>
+      <li><b>Fullscreen:</b> Use ⛶ Fullscreen (exit with Escape/❌/Done).</li>
+      <li><b>Back:</b> Use ⬅ Back to return to the hub.</li>
+    </ol>
+    <button id="closeHelp">✖ Close</button>
+  </div>
+</div>
 
-    function blockWithMessage(msg) {
-      document.body.innerHTML = `
-        <div style="
-          display:flex;
-          justify-content:center;
-          align-items:center;
-          height:100vh;
-          font-family:Arial,sans-serif;
-          font-size:20px;
-          font-weight:bold;
-          text-align:center;
-          padding:20px;
-        ">
-          ${msg}
-        </div>
-      `;
-    }
+<script>
+// ===== Device & WebGL checks =====
+function isAppleMobile() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  return /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+}
+function supportsWebGL() {
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(window.WebGLRenderingContext &&
+      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
+  } catch (e) { return false; }
+}
+function blockWithMessage(msg) {
+  document.body.innerHTML = `
+    <div style="display:flex;justify-content:center;align-items:center;
+    height:100vh;font-family:Arial,sans-serif;font-size:20px;font-weight:bold;
+    text-align:center;padding:20px;">${msg}</div>`;
+}
+if (isAppleMobile()) {
+  blockWithMessage("❌ Sorry, this Game Hub is not supported on iPhone/iPad/iPod. Please use macOS or another supported device.");
+} else if (!supportsWebGL()) {
+  blockWithMessage("⚠️ Your browser/device does not support WebGL.<br><br>Please visit <a href='https://get.webgl.org/' target='_blank'>https://get.webgl.org/</a> for help.");
+}
 
-    if (isAppleMobile()) {
-      blockWithMessage("❌ Sorry, this Game Hub is not supported on iPhone/iPad/iPod. Please use a desktop or supported device.");
-    } else if (!supportsWebGL()) {
-      blockWithMessage("⚠️ Your browser/device does not support WebGL.<br><br>Please visit <a href='https://get.webgl.org/' target='_blank'>https://get.webgl.org/</a> for help.");
-    }
+// ===== Game hub logic =====
+const placeholderIcon = "assets/holder-icon.png";
+const placeholderThumb = "assets/holder-thumb.png";
+const mainMenu = document.getElementById("mainMenu");
+const gameScreen = document.getElementById("gameScreen");
+const gameFrame = document.getElementById("gameFrame");
+const iframeOverlay = document.getElementById("iframeOverlay");
+const loadingOverlay = document.getElementById("loadingOverlay");
+const mainHeader = document.getElementById("mainHeader");
+const backButton = document.getElementById("backButton");
+const helpButton = document.getElementById("helpButton");
+const mainFooter = document.getElementById("mainFooter");
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+const helpModal = document.getElementById("helpModal");
+const closeHelp = document.getElementById("closeHelp");
 
-    // ===== Game Hub Logic =====
-    const games = [
-      { title: "Grow a Garden", url: "https://epicisgood.github.io/grow-a-garden", thumbnail: "assets/garden.png" },
-      { title: "Geometry Lite", url: "https://1games.io/game/geometry-lite/", thumbnail: "assets/geometry.png" }
-    ];
+helpButton.onclick = () => helpModal.style.display = "flex";
+closeHelp.onclick = () => helpModal.style.display = "none";
+helpModal.onclick = e => { if(e.target===helpModal) helpModal.style.display="none"; };
 
-    const gamesGrid = document.getElementById("gamesGrid");
-    const gameContainer = document.getElementById("gameContainer");
-    const gameFrame = document.getElementById("gameFrame");
-    const backBtn = document.getElementById("backBtn");
-    const helpBtn = document.getElementById("helpBtn");
-    const fullscreenBtn = document.getElementById("fullscreenBtn");
-    const helpOverlay = document.getElementById("helpOverlay");
-    const closeHelp = document.getElementById("closeHelp");
+fetch("https://raw.githubusercontent.com/POWBoy1/GameHubUpdater/refs/heads/main/games.json")
+.then(res=>res.json())
+.then(renderGames)
+.catch(err=>{console.error(err); mainMenu.innerHTML="<p style='color:red'>Failed to load game list.</p>";});
 
-    games.forEach(game => {
-      const card = document.createElement("div");
-      card.className = "game-card";
-      card.innerHTML = `
-        <img src="${game.thumbnail}" alt="${game.title}">
+function renderGames(games){
+  mainMenu.innerHTML="";
+  games.forEach(game=>{
+    const card=document.createElement("div");
+    card.className="game-card";
+    card.innerHTML=`
+      <img class="game-thumbnail" src="${game.thumbnail||placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
+      <div class="game-info">
+        <img src="${game.icon||placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
         <h3>${game.title}</h3>
-      `;
-      card.onclick = () => {
-        gamesGrid.style.display = "none";
-        gameContainer.style.display = "flex";
-        gameFrame.src = game.url;
-        localStorage.setItem("lastGame", game.url);
-      };
-      gamesGrid.appendChild(card);
-    });
+      </div>
+    `;
+    card.onclick=()=>openGame(game);
+    mainMenu.appendChild(card);
+  });
+}
 
-    backBtn.onclick = () => {
-      gameFrame.src = "";
-      gameContainer.style.display = "none";
-      gamesGrid.style.display = "grid";
+function openGame(game){
+  gameScreen.style.display="flex";
+  mainMenu.style.display="none";
+  backButton.style.display="block";
+  helpButton.style.display="block";
+
+  mainHeader.innerHTML="";
+  mainHeader.appendChild(backButton);
+
+  const icon=document.createElement("img");
+  icon.src=game.icon||placeholderIcon;
+  icon.alt=game.title+" icon";
+  mainHeader.appendChild(icon);
+
+  const title=document.createElement("span");
+  title.textContent=game.title;
+  mainHeader.appendChild(title);
+
+  mainHeader.appendChild(helpButton);
+
+  iframeOverlay.style.background=`
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('${game.thumbnail||placeholderThumb}') center/cover no-repeat
+  `;
+  iframeOverlay.style.display="flex";
+
+  gameFrame.style.display="block";
+  gameFrame.src="";
+  loadingOverlay.style.display="none";
+  fullscreenBtn.style.display="none";
+
+  iframeOverlay.onclick=()=>{
+    iframeOverlay.style.display="none";
+    loadingOverlay.style.display="flex";
+    gameFrame.src=game.url;
+    localStorage.setItem("lastGame", game.url);
+    gameFrame.onload=()=>{
+      loadingOverlay.style.display="none";
+      fullscreenBtn.style.display="block";
     };
+  };
+}
 
-    helpBtn.onclick = () => {
-      helpOverlay.style.display = "flex";
-    };
+function backToHub(){
+  gameScreen.style.display="none";
+  mainMenu.style.display="grid";
+  gameFrame.src="";
+  gameFrame.style.display="none";
+  iframeOverlay.style.display="none";
+  loadingOverlay.style.display="none";
+  backButton.style.display="none";
+  fullscreenBtn.style.display="none";
+  mainHeader.innerHTML="🎮 POWBoy1’s Game Hub 🎮";
+  mainHeader.appendChild(helpButton);
+  if(document.fullscreenElement) document.exitFullscreen();
+}
 
-    closeHelp.onclick = () => {
-      helpOverlay.style.display = "none";
-    };
+function toggleFullscreen(){
+  if(!document.fullscreenElement){
+    if(gameFrame.requestFullscreen) gameFrame.requestFullscreen();
+    else if(gameFrame.webkitEnterFullscreen) gameFrame.webkitEnterFullscreen();
+  }else{
+    if(document.exitFullscreen) document.exitFullscreen();
+    else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
 
-    fullscreenBtn.onclick = () => {
-      if (gameFrame.requestFullscreen) {
-        gameFrame.requestFullscreen();
-      } else if (gameFrame.webkitRequestFullscreen) {
-        gameFrame.webkitRequestFullscreen();
-      }
-    };
-
-    // Auto-resume last game
-    const lastGame = localStorage.getItem("lastGame");
-    if (lastGame) {
-      gamesGrid.style.display = "none";
-      gameContainer.style.display = "flex";
-      gameFrame.src = lastGame;
-    }
-  </script>
+document.addEventListener("fullscreenchange",()=>{
+  const fs=document.fullscreenElement===gameFrame;
+  [mainHeader, mainFooter, backButton, helpButton].forEach(el=>el.classList.toggle("hidden",fs));
+  fullscreenBtn.textContent=fs?"❌ Exit Fullscreen":"⛶ Fullscreen";
+});
+document.addEventListener("webkitfullscreenchange",()=>{
+  const fs=document.webkitFullscreenElement===gameFrame;
+  [mainHeader, mainFooter, backButton, helpButton].forEach(el=>el.classList.toggle("hidden",fs));
+  fullscreenBtn.textContent=fs?"❌ Exit Fullscreen":"⛶ Fullscreen";
+});
+</script>
 </body>
 </html>
