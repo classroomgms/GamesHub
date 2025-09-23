@@ -248,9 +248,9 @@ function blockWithMessage(msg) {
     </div>`;
 }
 if (isAppleMobile()) {
-  blockWithMessage("❌ Sorry, this Game Hub is not supported on iPhone/iPad/iPod.<br><br>Please use macOS or another supported device.");
+  blockWithMessage("❌ Sorry, this Game Hub is not supported on iPhone/iPad/iPod. ❌<br><br>Please use macOS or another supported device.");
 } else if (!supportsWebGL()) {
-  blockWithMessage("⚠️ Your browser/device does not support WebGL.<br><br>If you think this is a bug, please test at <a href='https://get.webgl.org/' target='_blank'>get.webgl.org</a>.");
+  blockWithMessage("⚠️ Your browser/device does not support WebGL. ⚠️<br><br>If you think this is a bug, please test at <a href='https://get.webgl.org/' target='_blank'>get.webgl.org</a>.");
 }
 
 // ===== Game hub logic =====
