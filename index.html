@@ -1,213 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Home</title>
-  <link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: #2c7be5;
-      color: white;
-      padding: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      font-weight: bold;
-      z-index: 1000;
-      transition: opacity 0.3s ease;
-    }
-    header img { height: 24px; margin-right: 8px; }
-    .back-button {
-      position: fixed;
-      top: 12px;
-      left: 10px;
-      background: red;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      color: white;
-      font-weight: bold;
-      display: none;
-      z-index: 1001;
-    }
-    #helpButton {
-      background: #ffc107;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-      color: black;
-      position: absolute;
-      right: 40px;
-      top: 12px;
-      z-index: 1001;
-    }
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 100px 20px 80px;
-      flex: 1;
-    }
-    .game-card {
-      background: white;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      cursor: pointer;
-      transition: transform 0.2s;
-      display: flex;
-      flex-direction: column;
-    }
-    .game-card:hover { transform: scale(1.05); }
-    .game-thumbnail { width: 100%; height: 150px; object-fit: cover; }
-    .game-info { display: flex; align-items: center; padding: 10px; }
-    .game-info img { width: 24px; height: 24px; margin-right: 10px; }
-    .game-screen { display: none; flex-direction: column; align-items: center; justify-content: flex-start; background: white; padding-top: 80px; padding-bottom: 60px; flex: 1; }
-    .game-wrapper { display: flex; flex-direction: column; align-items: flex-start; width: 80%; max-width: 1200px; position: relative; }
-    .game-container {
-      border: 12px solid #2c7be5;
-      border-radius: 24px;
-      width: 100%;
-      aspect-ratio: 16/9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
-    }
-    iframe { width: 100%; height: 100%; border: none; border-radius: 12px; display: none; }
-    .overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 12px;
-      cursor: pointer;
-      z-index: 5;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      background: rgba(0,0,0,0.4);
-      transition: background 0.3s ease;
-      text-shadow: 0 0 5px black;
-    }
-    .overlay:hover { background: rgba(0,0,0,0.6); }
-    .loading-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 18px;
-      z-index: 10;
-    }
-    .spinner {
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid #2c7be5;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-      margin-bottom: 15px;
-    }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    .fullscreen-btn {
-      margin-top: 5px;
-      align-self: flex-end;
-      transform: translateX(20px);
-      background: #2c7be5;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: bold;
-      display: none;
-    }
-    footer {
-      background: #2c7be5;
-      color: white;
-      text-align: center;
-      padding: 12px;
-      font-weight: bold;
-      transition: opacity 0.3s ease;
-      margin-top: auto; /* sticky footer behavior */
-    }
-    .hidden { opacity: 0; pointer-events: none; }
-    #helpModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 2000;
-      justify-content: center;
-      align-items: center;
-    }
-    #helpModalContent {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 600px;
-      max-height: 80%;
-      overflow-y: auto;
-      position: relative;
-    }
-    #helpModalContent button {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: red;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 6px 10px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Home</title>
+<link rel="icon" type="image/x-icon" href="assets/GoogleClassroomIcon.ico">
+<style>
+/* --- Global Styles --- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* --- Header --- */
+header {
+  background: #2c7be5;
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+header img { height: 24px; vertical-align: middle; }
+.back-button, #helpButton {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.back-button {
+  background: red;
+  color: white;
+  display: none;
+}
+#helpButton {
+  background: #ffc107;
+  color: black;
+}
+
+/* --- Main Menu --- */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  flex: 1;
+}
+.game-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+.game-card:hover { transform: scale(1.05); }
+.game-thumbnail { width: 100%; height: 150px; object-fit: cover; }
+.game-info { display: flex; align-items: center; padding: 10px; }
+.game-info img { width: 24px; height: 24px; margin-right: 10px; }
+
+/* --- Game Screen --- */
+.game-screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 20px 0;
+  flex: 1;
+  width: 100%;
+}
+.game-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 10px;
+}
+.game-container-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.game-container {
+  border: 12px solid #2c7be5;
+  border-radius: 24px;
+  width: 80vw;          /* 80% of viewport width */
+  height: 80vh;         /* 80% of viewport height */
+  max-width: 1500px;    /* optional max width */
+  max-height: 844px;    /* optional max height for 16:9 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+.game-container iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+}
+
+/* --- Overlay / Loading --- */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  cursor: pointer;
+  z-index: 5;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  background: rgba(0,0,0,0.4);
+  transition: background 0.3s ease;
+  text-shadow: 0 0 5px black;
+}
+.overlay:hover { background: rgba(0,0,0,0.6); }
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 18px;
+  z-index: 10;
+}
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #2c7be5;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* --- Fullscreen Button --- */
+.fullscreen-btn {
+  margin-top: 5px;
+  background: #2c7be5;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: none;
+}
+
+/* --- Footer --- */
+footer {
+  background: #2c7be5;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  font-weight: bold;
+  margin-top: auto;
+}
+
+/* --- Hidden --- */
+.hidden { opacity: 0; pointer-events: none; }
+
+/* --- Help Modal --- */
+#helpModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+#helpModalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80%;
+  overflow-y: auto;
+  position: relative;
+}
+#helpModalContent button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+</style>
 </head>
 <body>
+
 <header id="mainHeader">
-  <button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button>
-  🎮 POWBoy1’s Game Hub 🎮
-  <button id="helpButton">❓ Help</button>
+  <div><button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button></div>
+  <div class="header-center">🎮 POWBoy1’s Game Hub 🎮</div>
+  <div><button id="helpButton">❓ Help</button></div>
 </header>
 
 <div id="mainMenu" class="games-grid"></div>
 
 <div id="gameScreen" class="game-screen">
   <div class="game-wrapper">
-    <div class="game-container">
-      <div id="iframeOverlay" class="overlay">▶ Play</div>
-      <div id="loadingOverlay" class="loading-overlay">
-        <div class="spinner"></div>
-        Loading Please Wait...
+    <div class="game-container-wrapper">
+      <div class="game-container">
+        <div id="iframeOverlay" class="overlay">▶ Play</div>
+        <div id="loadingOverlay" class="loading-overlay">
+          <div class="spinner"></div>
+          Loading Please Wait...
+        </div>
+        <iframe id="gameFrame"></iframe>
       </div>
-      <iframe id="gameFrame"></iframe>
+      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
     </div>
-    <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
   </div>
 </div>
 
@@ -240,12 +279,9 @@ function supportsWebGL() {
   } catch (e) { return false; }
 }
 function blockWithMessage(msg) {
-  document.body.innerHTML = `
-    <div style="display:flex;justify-content:center;align-items:center;
+  document.body.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;
     height:100vh;font-family:Arial,sans-serif;font-size:20px;font-weight:bold;
-    text-align:center;padding:20px;flex-direction:column;">
-      <div>${msg}</div>
-    </div>`;
+    text-align:center;padding:20px;flex-direction:column;">${msg}</div>`;
 }
 if (isAppleMobile()) {
   blockWithMessage("❌ Sorry, this Game Hub is not supported on iPhone/iPad/iPod. ❌<br><br>Please use macOS or another supported device.");
@@ -298,22 +334,16 @@ function renderGames(games){
 function openGame(game){
   gameScreen.style.display="flex";
   mainMenu.style.display="none";
-  backButton.style.display="block";
-  helpButton.style.display="block";
+  backButton.style.display="inline-block";
 
-  mainHeader.innerHTML="";
-  mainHeader.appendChild(backButton);
-
-  const icon=document.createElement("img");
-  icon.src=game.icon||placeholderIcon;
-  icon.alt=game.title+" icon";
-  mainHeader.appendChild(icon);
-
-  const title=document.createElement("span");
-  title.textContent=game.title;
-  mainHeader.appendChild(title);
-
-  mainHeader.appendChild(helpButton);
+  mainHeader.innerHTML = "";
+  const left = document.createElement("div"); left.appendChild(backButton);
+  const center = document.createElement("div"); center.className = "header-center";
+  const icon = document.createElement("img"); icon.src = game.icon||placeholderIcon; icon.alt = game.title+" icon";
+  const title = document.createElement("span"); title.textContent = game.title;
+  center.appendChild(icon); center.appendChild(title);
+  const right = document.createElement("div"); right.appendChild(helpButton);
+  mainHeader.appendChild(left); mainHeader.appendChild(center); mainHeader.appendChild(right);
 
   iframeOverlay.style.background=`
     linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
@@ -347,8 +377,7 @@ function backToHub(){
   loadingOverlay.style.display="none";
   backButton.style.display="none";
   fullscreenBtn.style.display="none";
-  mainHeader.innerHTML="🎮 POWBoy1’s Game Hub 🎮";
-  mainHeader.appendChild(helpButton);
+  mainHeader.innerHTML = `<div></div><div class="header-center">🎮 POWBoy1’s Game Hub 🎮</div><div>${helpButton.outerHTML}</div>`;
   if(document.fullscreenElement) document.exitFullscreen();
 }
 
@@ -356,7 +385,7 @@ function toggleFullscreen(){
   if(!document.fullscreenElement){
     if(gameFrame.requestFullscreen) gameFrame.requestFullscreen();
     else if(gameFrame.webkitEnterFullscreen) gameFrame.webkitEnterFullscreen();
-  }else{
+  } else {
     if(document.exitFullscreen) document.exitFullscreen();
     else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
   }
