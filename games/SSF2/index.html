@@ -1,30 +1,46 @@
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Super Smash Flash 2</title>
-  </head>
-  <body>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-    <div id="ruffle" width="100%" height="100%"></div>
-    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
-    <script>
-      window.RufflePlayer = window.RufflePlayer || {};
-      window.addEventListener("load", (event) => {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Super Smash Flash 2</title>
+</head>
+<body style="margin:0; overflow:hidden; background:#000;">
+  <script>
+    const swfobjectScript = document.createElement("script");
+    swfobjectScript.src = "https://cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js";
+    swfobjectScript.type = "text/javascript";
+    swfobjectScript.async = true;
+    document.head.appendChild(swfobjectScript);
+
+    swfobjectScript.onload = () => {
+      const ruffleScript = document.createElement("script");
+      ruffleScript.src = "https://unpkg.com/@ruffle-rs/ruffle";
+      ruffleScript.type = "text/javascript";
+      ruffleScript.async = true;
+      document.head.appendChild(ruffleScript);
+
+      ruffleScript.onload = () => {
+        let el = document.getElementById("embed");
+        if (!el) {
+          el = document.createElement("div");
+          el.id = "embed";
+          document.body.appendChild(el);
+        }
+
         const ruffle = window.RufflePlayer.newest();
         const player = ruffle.createPlayer();
-        const container = document.getElementById("ruffle");
-        player.id = "player";
+
+        player.style.position = "fixed";
+        player.style.top = "0";
+        player.style.left = "0";
         player.style.width = "100%";
         player.style.height = "100%";
-        player.config.quality = "best";
-        container.appendChild(player);
-        player.load("SSF2.swf");
-      });
-    </script>
-  </body>
+        player.style.border = "none";
+
+        el.appendChild(player);
+        player.load("SSF2Portable.swf");
+      };
+    };
+  </script>
+</body>
 </html>
