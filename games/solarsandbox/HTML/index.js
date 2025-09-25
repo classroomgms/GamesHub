@@ -1,5 +1,6 @@
 var Godot = (() => {
-  var _scriptName = typeof document != 'undefined' ? document.currentScript?.src : undefined;
+  // Do not attempt to read the script URL; use relative paths instead.
+  var _scriptName = undefined;
   return (
 async function(moduleArg = {}) {
   var moduleRtn;
