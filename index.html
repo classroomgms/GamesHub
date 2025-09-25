@@ -106,10 +106,10 @@ header img { height: 24px; vertical-align: middle; }
 .game-container {
   border: 12px solid #2c7be5;
   border-radius: 24px;
-  width: 80vw;          /* 80% of viewport width */
-  height: 80vh;         /* 80% of viewport height */
-  max-width: 1500px;    /* optional max width */
-  max-height: 844px;    /* optional max height for 16:9 */
+  width: 80vw;
+  height: 80vh;
+  max-width: 1500px;
+  max-height: 844px; /* ~16:9 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -135,11 +135,11 @@ header img { height: 24px; vertical-align: middle; }
   color: white;
   font-size: 18px;
   font-weight: bold;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.6);
   transition: background 0.3s ease;
   text-shadow: 0 0 5px black;
 }
-.overlay:hover { background: rgba(0,0,0,0.6); }
+.overlay:hover { background: rgba(0,0,0,0.75); }
 .loading-overlay {
   position: absolute;
   inset: 0;
@@ -227,9 +227,9 @@ footer {
 <body>
 
 <header id="mainHeader">
-  <div><button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button></div>
+  <div><button class="back-button" id="backButton" title="Go Back" onclick="backToHub()">⬅ Back</button></div>
   <div class="header-center">🎮 POWBoy1’s Game Hub 🎮</div>
-  <div><button id="helpButton">❓ Help</button></div>
+  <div><button id="helpButton" title="Show Help">❓ Help</button></div>
 </header>
 
 <div id="mainMenu" class="games-grid"></div>
@@ -243,9 +243,12 @@ footer {
           <div class="spinner"></div>
           Loading Please Wait...
         </div>
-        <iframe id="gameFrame"></iframe>
+        <!-- 🛡️ Sandbox prevents iframe from reading parent URL -->
+        <iframe id="gameFrame" title="Game Frame"
+          sandbox="allow-scripts allow-same-origin allow-pointer-lock allow-fullscreen">
+        </iframe>
       </div>
-      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn">⛶ Fullscreen</button>
+      <button onclick="toggleFullscreen()" id="fullscreenBtn" class="fullscreen-btn" title="Toggle Fullscreen">⛶ Fullscreen</button>
     </div>
   </div>
 </div>
@@ -279,9 +282,9 @@ function supportsWebGL() {
   } catch (e) { return false; }
 }
 function blockWithMessage(msg) {
-  document.body.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;
-    height:100vh;font-family:Arial,sans-serif;font-size:20px;font-weight:bold;
-    text-align:center;padding:20px;flex-direction:column;">${msg}</div>`;
+  const main = document.getElementById("mainMenu");
+  main.innerHTML = `<div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;
+    font-size:20px;font-weight:bold;text-align:center;padding:20px;flex-direction:column;">${msg}</div>`;
 }
 if (isAppleMobile()) {
   blockWithMessage("❌ Sorry, this Game Hub is not supported on iPhone/iPad/iPod. ❌<br><br>Please use macOS or another supported device.");
@@ -320,7 +323,7 @@ function renderGames(games){
     const card=document.createElement("div");
     card.className="game-card";
     card.innerHTML=`
-      <img class="game-thumbnail" src="${game.thumbnail||placeholderThumb}" alt="${game.title}" onerror="this.src='${placeholderThumb}'">
+      <img class="game-thumbnail" src="${game.thumbnail||placeholderThumb}" alt="Thumbnail of ${game.title}" onerror="this.src='${placeholderThumb}'">
       <div class="game-info">
         <img src="${game.icon||placeholderIcon}" alt="${game.title} icon" onerror="this.src='${placeholderIcon}'">
         <h3>${game.title}</h3>
@@ -346,7 +349,7 @@ function openGame(game){
   mainHeader.appendChild(left); mainHeader.appendChild(center); mainHeader.appendChild(right);
 
   iframeOverlay.style.background=`
-    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
     url('${game.thumbnail||placeholderThumb}') center/cover no-repeat
   `;
   iframeOverlay.style.display="flex";
@@ -377,7 +380,21 @@ function backToHub(){
   loadingOverlay.style.display="none";
   backButton.style.display="none";
   fullscreenBtn.style.display="none";
-  mainHeader.innerHTML = `<div></div><div class="header-center">🎮 POWBoy1’s Game Hub 🎮</div><div>${helpButton.outerHTML}</div>`;
+
+  // rebuild header safely
+  mainHeader.innerHTML = "";
+  const left = document.createElement("div");
+  const center = document.createElement("div");
+  const right = document.createElement("div");
+
+  center.className = "header-center";
+  center.textContent = "🎮 POWBoy1’s Game Hub 🎮";
+  right.appendChild(helpButton);
+
+  mainHeader.appendChild(left);
+  mainHeader.appendChild(center);
+  mainHeader.appendChild(right);
+
   if(document.fullscreenElement) document.exitFullscreen();
 }
 
@@ -393,12 +410,12 @@ function toggleFullscreen(){
 
 document.addEventListener("fullscreenchange",()=>{
   const fs=document.fullscreenElement===gameFrame;
-  [mainHeader, mainFooter, backButton, helpButton].forEach(el=>el.classList.toggle("hidden",fs));
+  [mainHeader, mainFooter].forEach(el=>el.classList.toggle("hidden",fs));
   fullscreenBtn.textContent=fs?"❌ Exit Fullscreen":"⛶ Fullscreen";
 });
 document.addEventListener("webkitfullscreenchange",()=>{
   const fs=document.webkitFullscreenElement===gameFrame;
-  [mainHeader, mainFooter, backButton, helpButton].forEach(el=>el.classList.toggle("hidden",fs));
+  [mainHeader, mainFooter].forEach(el=>el.classList.toggle("hidden",fs));
   fullscreenBtn.textContent=fs?"❌ Exit Fullscreen":"⛶ Fullscreen";
 });
 </script>
