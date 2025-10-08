@@ -20,6 +20,31 @@ html, body {
   overflow-x: hidden;
 }
 
+/* --- Login Screen --- */
+#loginScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: Arial, sans-serif;
+}
+#loginScreen input {
+  padding: 10px;
+  font-size: 16px;
+  margin: 10px;
+}
+#loginScreen button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* --- Hide Main Content Initially --- */
+#mainHeader, #mainMenu, #mainFooter {
+  display: none;
+}
+
 /* --- Header --- */
 header {
   background: #2c7be5;
@@ -106,10 +131,10 @@ header img { height: 24px; vertical-align: middle; }
 .game-container {
   border: 12px solid #2c7be5;
   border-radius: 24px;
-  width: 80vw;          /* 80% of viewport width */
-  height: 80vh;         /* 80% of viewport height */
-  max-width: 1500px;    /* optional max width */
-  max-height: 844px;    /* optional max height for 16:9 */
+  width: 80vw;
+  height: 80vh;
+  max-width: 1500px;
+  max-height: 844px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -226,9 +251,17 @@ footer {
 </head>
 <body>
 
+<!-- Login Screen -->
+<div id="loginScreen">
+  <h2>🔒 Enter Password to Access Game Hub</h2>
+  <input type="password" id="passwordInput" placeholder="Password">
+  <button onclick="checkPassword()">Unlock</button>
+</div>
+
+<!-- Main Content -->
 <header id="mainHeader">
   <div><button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button></div>
-  <div class="header-center">🎮 POWBoy1’s Game Hub 🎮</div>
+  <div class="header-center">AMES</div>
   <div><button id="helpButton">❓ Help</button></div>
 </header>
 
@@ -261,12 +294,30 @@ footer {
       <li><b>Fullscreen:</b> Use ⛶ Fullscreen (exit with Escape/❌/Done).</li>
       <li><b>Back:</b> Use ⬅ Back to return to the hub.</li>
     </ol>
-    <button id="closeHelp">✖ Close</button>
+        <button id="closeHelp">✖ Close</button>
   </div>
 </div>
 
 <script>
+// ===== Password Protection =====
+function checkPassword() {
+  const input = document.getElementById("passwordInput").value;
+  if (input === "chicken") {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("mainHeader").style.display = "flex";
+    document.getElementById("mainMenu").style.display = "grid";
+    document.getElementById("mainFooter").style.display = "block";
+  } else {
+    alert("Incorrect password. Try again.");
+  }
+}
+
 // ===== Device & WebGL checks =====
+function blockWithMessage(msg) {
+  document.body.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;
+    height:100vh;font-family:Arial,sans-serif;font-size:20px;font-weight:bold;
+    text-align:center;padding:20px;flex-direction:column;">${msg}</div>`;
+}
 function isAppleMobile() {
   const ua = navigator.userAgent || navigator.vendor || window.opera;
   return /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
@@ -277,11 +328,6 @@ function supportsWebGL() {
     return !!(window.WebGLRenderingContext &&
       (canvas.getContext("webgl") || canvas.getContext("experimental-webgl")));
   } catch (e) { return false; }
-}
-function blockWithMessage(msg) {
-  document.body.innerHTML = `<div style="display:flex;justify-content:center;align-items:center;
-    height:100vh;font-family:Arial,sans-serif;font-size:20px;font-weight:bold;
-    text-align:center;padding:20px;flex-direction:column;">${msg}</div>`;
 }
 if (isAppleMobile()) {
   blockWithMessage("❌ Sorry, this Game Hub is not supported on iPhone/iPad/iPod. ❌<br><br>Please use macOS or another supported device.");
