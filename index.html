@@ -252,16 +252,21 @@ footer {
 <body>
 
 <!-- Login Screen -->
+<!-- Login Screen -->
 <div id="loginScreen">
   <h2>🔒 Enter Password to Access Game Hub</h2>
   <input type="password" id="passwordInput" placeholder="Password">
   <button onclick="checkPassword()">Unlock</button>
+  <p style="margin-top:10px;font-size:14px;color:#555;">
+    Note: Password may be changed periodically. Registered users will be notified of any updates.
+  </p>
 </div>
+
 
 <!-- Main Content -->
 <header id="mainHeader">
   <div><button class="back-button" id="backButton" onclick="backToHub()">⬅ Back</button></div>
-  <div class="header-center">AMES</div>
+  <div class="header-center">GAMES</div>
   <div><button id="helpButton">❓ Help</button></div>
 </header>
 
@@ -283,11 +288,11 @@ footer {
   </div>
 </div>
 
-<footer id="mainFooter">Made by POWBoy1</footer>
+<footer id="mainFooter">Made by Derrick</footer>
 
 <div id="helpModal">
   <div id="helpModalContent">
-    <h2>🎮 How to Use POWBoy1’s Game Hub</h2>
+    <h2> How to Use Derrick's Game Hub</h2>
     <ol>
       <li><b>Browse Games:</b> Click any game card.</li>
       <li><b>Play:</b> Press ▶ Play on the overlay.</li>
@@ -308,9 +313,10 @@ function checkPassword() {
     document.getElementById("mainMenu").style.display = "grid";
     document.getElementById("mainFooter").style.display = "block";
   } else {
-    alert("Incorrect password. Try again.");
+    alert("Incorrect password. Did you pay? Registration fee of $2 must be paid in cash to Derrick.");
   }
 }
+
 
 // ===== Device & WebGL checks =====
 function blockWithMessage(msg) {
@@ -423,7 +429,7 @@ function backToHub(){
   loadingOverlay.style.display="none";
   backButton.style.display="none";
   fullscreenBtn.style.display="none";
-  mainHeader.innerHTML = `<div></div><div class="header-center">🎮 POWBoy1’s Game Hub 🎮</div><div>${helpButton.outerHTML}</div>`;
+  mainHeader.innerHTML = `<div></div><div class="header-center">Derrick's Game Hub</div><div>${helpButton.outerHTML}</div>`;
   if(document.fullscreenElement) document.exitFullscreen();
 }
 
